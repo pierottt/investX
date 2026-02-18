@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-0: #0b0d14;
+  --bg-1: #121426;
+  --panel: #151a2e;
+  --border: rgba(255, 255, 255, 0.06);
+
+  --text: #e5e7eb;
+  --text-muted: #9ca3af;
+
+  --p: #7c3aed;
+  --i: #6366f1;
+  --b: #2563eb;
+  --c: #22d3ee;
+
+  --gain: #22c55e;
+  --loss: #ef4444;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  color: var(--text);
+  background: linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 60%, var(--bg-0) 100%);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+
+@layer utilities {
+  .bg-app {
+    background: linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 60%, var(--bg-0) 100%);
+  }
+
+  .bg-accent {
+    background: linear-gradient(135deg, var(--p) 0%, var(--b) 60%, var(--c) 100%);
+  }
+
+  .glass {
+    background: rgba(21, 26, 46, 0.72);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(14px);
+  }
+
+  .shadow-glow {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 18px rgba(124, 58, 237, 0.2);
+  }
+
+  .tap {
+    transition: transform 120ms ease, filter 120ms ease;
+  }
+  .tap:active {
+    transform: scale(0.96);
+    filter: brightness(0.98);
+  }
+}
