@@ -6,25 +6,25 @@ import { Wallet, ArrowLeftRight, Coffee, ClipboardList, Sparkles, Star, ScanFace
 
 export default function HomePage() {
   return (
-    <div>
+    <div className="page-fit">
       <TopBar />
 
       {/* Hero */}
-      <div className="px-5 pt-5">
-        <div className="relative overflow-hidden rounded-2xl glass shadow-glow p-5">
+      <div className="page-x pt-4 min-[390px]:pt-5">
+        <div className="relative overflow-hidden rounded-2xl glass p-4 shadow-glow min-[360px]:p-5">
           {/* fake cosmic gradient */}
           <div className="absolute inset-0 opacity-40 bg-accent blur-2xl" />
-          <div className="relative">
-            <div className="text-white/80 text-sm">สวัสดีตอนเช้า</div>
-            <div className="text-xl font-semibold">คุณ อินโนเวสท์เอกซ์</div>
+          <div className="relative min-w-0">
+            <div className="text-xs text-white/80 min-[360px]:text-sm">สวัสดีตอนเช้า</div>
+            <div className="text-lg font-semibold min-[360px]:text-xl">คุณ อินโนเวสท์เอกซ์</div>
 
-            <div className="mt-4 flex items-center justify-between rounded-2xl glass p-4">
-              <div>
+            <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl glass p-3 min-[360px]:p-4">
+              <div className="min-w-0">
                 <div className="text-xs text-white/55">Total Portfolio</div>
-                <div className="mt-1 text-base font-medium tracking-wider">**************</div>
+                <div className="mt-1 text-sm font-medium tracking-wider min-[360px]:text-base">**************</div>
               </div>
-              <button className="tap h-11 w-11 rounded-full bg-accent shadow-glow flex items-center justify-center">
-                <span className="text-white text-lg">→</span>
+              <button className="tap flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent shadow-glow min-[360px]:h-11 min-[360px]:w-11">
+                <span className="text-base text-white min-[360px]:text-lg">→</span>
               </button>
             </div>
           </div>
@@ -32,21 +32,21 @@ export default function HomePage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="px-5 pt-6">
-        <div className="grid grid-cols-4 gap-4">
-          <IconCircleButton icon={<Wallet className="h-5 w-5 text-white/80" />} label="Wallet" />
-          <IconCircleButton icon={<ArrowLeftRight className="h-5 w-5 text-white/80" />} label="Exchange" />
-          <IconCircleButton icon={<Coffee className="h-5 w-5 text-white/80" />} label="Cafe INVEST" />
-          <IconCircleButton icon={<ClipboardList className="h-5 w-5 text-white/80" />} label="My Order" />
-          <IconCircleButton icon={<Sparkles className="h-5 w-5 text-white/80" />} label="For you" />
-          <IconCircleButton icon={<Star className="h-5 w-5 text-white/80" />} label="Point" />
-          <IconCircleButton icon={<ScanFace className="h-5 w-5 text-white/80" />} label="Login Scan" />
-          <IconCircleButton icon={<Radio className="h-5 w-5 text-white/80" />} label="Streaming" />
+      <div className="page-x pt-5 min-[390px]:pt-6">
+        <div className="grid grid-cols-4 gap-2 min-[360px]:gap-3 min-[390px]:gap-4">
+          <IconCircleButton icon={<Wallet className="h-4 w-4 text-white/80 min-[360px]:h-5 min-[360px]:w-5" />} label="Wallet" />
+          <IconCircleButton icon={<ArrowLeftRight className="h-4 w-4 text-white/80 min-[360px]:h-5 min-[360px]:w-5" />} label="Exchange" />
+          <IconCircleButton icon={<Coffee className="h-4 w-4 text-white/80 min-[360px]:h-5 min-[360px]:w-5" />} label="Cafe INVEST" />
+          <IconCircleButton icon={<ClipboardList className="h-4 w-4 text-white/80 min-[360px]:h-5 min-[360px]:w-5" />} label="My Order" />
+          <IconCircleButton icon={<Sparkles className="h-4 w-4 text-white/80 min-[360px]:h-5 min-[360px]:w-5" />} label="For you" />
+          <IconCircleButton icon={<Star className="h-4 w-4 text-white/80 min-[360px]:h-5 min-[360px]:w-5" />} label="Point" />
+          <IconCircleButton icon={<ScanFace className="h-4 w-4 text-white/80 min-[360px]:h-5 min-[360px]:w-5" />} label="Login Scan" />
+          <IconCircleButton icon={<Radio className="h-4 w-4 text-white/80 min-[360px]:h-5 min-[360px]:w-5" />} label="Streaming" />
         </div>
       </div>
 
       {/* Featured cards */}
-      <div className="px-5 pt-6 grid grid-cols-2 gap-4">
+      <div className="page-x grid grid-cols-1 gap-3 pt-5 min-[360px]:grid-cols-2 min-[390px]:gap-4 min-[390px]:pt-6">
         <CardGlass className="p-4">
           <div className="text-sm font-semibold">INVEST IDEAS</div>
           <div className="mt-2 text-xs text-white/60">Curated strategies & insights</div>

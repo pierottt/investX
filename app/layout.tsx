@@ -4,7 +4,7 @@ import React from "react";
 import AppShell from "@/components/shell/AppShell";
 
 export const metadata: Metadata = {
-  title: "Innovest-X (Clone UI)",
+  title: "Invest-X",
   description: "Dark neon fintech UI clone scaffold in Next.js"
 };
 

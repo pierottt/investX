@@ -7,6 +7,7 @@
   --bg-1: #121426;
   --panel: #151a2e;
   --border: rgba(255, 255, 255, 0.06);
+  --nav-reserved: calc(6.25rem + env(safe-area-inset-bottom));
 
   --text: #e5e7eb;
   --text-muted: #9ca3af;
@@ -23,6 +24,7 @@
 html,
 body {
   height: 100%;
+  width: 100%;
 }
 
 body {
@@ -30,6 +32,7 @@ body {
   background: linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 60%, var(--bg-0) 100%);
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Apple Color Emoji",
     "Segoe UI Emoji";
+  overflow: hidden;
 }
 
 @layer utilities {
@@ -57,5 +60,87 @@ body {
   .tap:active {
     transform: scale(0.96);
     filter: brightness(0.98);
+  }
+
+  .page-x {
+    @apply px-3 min-[360px]:px-4 min-[390px]:px-5;
+  }
+
+  .pb-safe-nav {
+    padding-bottom: var(--nav-reserved);
+  }
+
+  .pb-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .page-fit {
+    height: calc(100dvh - var(--nav-reserved));
+    overflow: hidden;
+  }
+
+  .page-scroll {
+    height: calc(100dvh - var(--nav-reserved));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .trade-pill-muted {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .trade-divider {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .page-title {
+    @apply text-[32px] font-semibold leading-none tracking-tight text-white min-[360px]:text-[34px] min-[390px]:text-4xl;
+  }
+
+  .focus-accent {
+    outline: none;
+  }
+
+  .focus-accent:focus-visible {
+    border-color: rgba(167, 139, 250, 0.75);
+    box-shadow:
+      0 0 0 2px rgba(139, 92, 246, 0.88),
+      0 0 0 4px rgba(99, 102, 241, 0.22),
+      0 0 16px rgba(124, 58, 237, 0.35);
+  }
+
+  .icon-action-button {
+    @apply tap flex h-9 w-9 items-center justify-center rounded-full glass text-[#8B77DC] transition-colors hover:text-[#9F8DF0];
+  }
+
+  .underline-tab-list {
+    @apply flex w-max min-w-full gap-5 px-1 text-[13px] min-[390px]:text-sm;
+  }
+
+  .underline-tab-trigger {
+    @apply tap relative shrink-0 rounded-md pb-2.5 text-white/50 transition-colors hover:text-white/80;
+  }
+
+  .underline-tab-trigger:focus-visible {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  .underline-tab-trigger-active {
+    @apply font-semibold text-[#9381E9];
+  }
+
+  .underline-tab-indicator {
+    @apply absolute inset-x-0 -bottom-px h-[2px] rounded bg-[#8170DF];
   }
 }

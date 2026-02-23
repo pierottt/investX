@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="TH flag">
+  <defs>
+    <clipPath id="clip-th">
+      <circle cx="12" cy="12" r="11"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#clip-th)">
+    <rect width="24" height="24" fill="#ffffff"/>
+    <rect width="24" height="4" y="0" fill="#a51931"/>
+    <rect width="24" height="4" y="20" fill="#a51931"/>
+    <rect width="24" height="4" y="4" fill="#f4f5f8"/>
+    <rect width="24" height="4" y="16" fill="#f4f5f8"/>
+    <rect width="24" height="8" y="8" fill="#2d2a4a"/>
+  </g>
+  <circle cx="12" cy="12" r="11" fill="none" stroke="rgba(255,255,255,0.25)"/>
+</svg>
