@@ -1,8 +1,8 @@
 import { Search, Mail } from "lucide-react";
 
 export default function TopBar({
-  title = "innovestX",
-  subtitle = "A subsidiary of SCBX Group"
+  title = "investX",
+  subtitle = "invest platform"
 }: {
   title?: string;
   subtitle?: string;
