@@ -20,7 +20,7 @@ export default function WatchlistPage() {
 
   return (
     <div className="page-scroll no-scrollbar">
-      <div className="page-x pb-safe-nav pt-4 min-[390px]:pt-5">
+      <div className="page-x pb-safe-nav pt-safe-top">
         <PageHeader title="Watchlist" />
         <UnderlineTabs
           items={tabs}

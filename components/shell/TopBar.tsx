@@ -8,7 +8,7 @@ export default function TopBar({
   subtitle?: string;
 }) {
   return (
-    <div className="page-x flex items-start justify-between gap-3 pt-4 min-[390px]:pt-6">
+    <div className="page-x pt-safe-top flex items-start justify-between gap-3">
       <div className="min-w-0 flex-1 pr-1">
         <div className="text-base font-semibold tracking-tight min-[360px]:text-lg">{title}</div>
         <div className="truncate text-[10px] text-white/55 min-[360px]:text-xs">{subtitle}</div>

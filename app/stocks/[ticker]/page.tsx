@@ -12,7 +12,7 @@ export default async function StockDetailPage({ params }: { params: Promise<{ ti
 
   return (
     <div className="page-scroll no-scrollbar bg-[rgba(16,18,27,1)] min-h-screen">
-      <div className="page-x pt-4 min-[390px]:pt-5 pb-28">
+      <div className="page-x pt-safe-top pb-28">
         {/* Header */}
         <div className="flex items-center justify-between gap-3">
           <Link

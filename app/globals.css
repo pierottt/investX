@@ -109,6 +109,16 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
   }
 
+  .pt-safe-top {
+    padding-top: calc(env(safe-area-inset-top) + 1rem);
+  }
+
+  @media (min-width: 390px) {
+    .pt-safe-top {
+      padding-top: calc(env(safe-area-inset-top) + 1.25rem);
+    }
+  }
+
   .app-shell-height {
     height: var(--app-height);
   }

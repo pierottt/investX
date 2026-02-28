@@ -38,7 +38,7 @@ export default function PortfolioPage() {
 
   return (
     <div className="page-scroll no-scrollbar bg-[radial-gradient(circle_at_top,_#16182b_0%,_#090b15_55%,_#070910_100%)]">
-      <div className="page-x pb-safe-nav pt-4 min-[390px]:pt-5">
+      <div className="page-x pb-safe-nav pt-safe-top">
         <PageHeader title="Portfolio" />
         <UnderlineTabs
           items={tabs}

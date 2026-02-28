@@ -9,7 +9,7 @@ export default function HomePage() {
     <div className="page-scroll no-scrollbar">
       <TopBar />
 
-      <div className="page-x pb-safe-nav pt-4 min-[390px]:pt-5">
+      <div className="page-x pb-safe-nav pt-safe-top">
         {/* Hero */}
         <section className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[radial-gradient(circle_at_18%_0%,rgba(124,58,237,0.32),transparent_42%),radial-gradient(circle_at_90%_16%,rgba(34,211,238,0.18),transparent_34%),rgba(12,15,28,0.94)] p-4 shadow-glow min-[360px]:p-5">
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(140deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0)_45%)]" />
