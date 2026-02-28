@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { ChevronRight, Info } from "lucide-react";
 import PageHeader from "@/components/shell/PageHeader";
@@ -119,7 +120,13 @@ export default function MarketsPage() {
                 {upcomingEarnings.map((earn, i) => (
                   <div key={i} className="flex flex-col gap-3">
                     <div className="flex items-center gap-2">
-                      <img src={earn.flagSrc} alt={earn.symbol} className="w-[18px] h-[18px] rounded-sm object-cover" />
+                      <Image
+                        src={earn.flagSrc}
+                        alt={earn.symbol}
+                        width={18}
+                        height={18}
+                        className="w-[18px] h-[18px] rounded-sm object-cover"
+                      />
                       <span className="text-[15px] font-bold text-white tracking-wide">{earn.symbol}</span>
                       <span className="text-xs text-white/40">{earn.company}</span>
                     </div>
@@ -161,7 +168,13 @@ function IndexCard({ data }: { data: any }) {
     <CardGlass className="p-2.5 min-[390px]:p-3 bg-[#141416]/90 border border-white/[0.04] flex flex-col relative overflow-hidden rounded-[14px]">
       <div className="flex items-center gap-1.5 z-10">
         {data.flagSrc ? (
-          <img src={data.flagSrc} alt={data.symbol} className="w-[14px] h-[14px] rounded-[2px] object-cover" />
+          <Image
+            src={data.flagSrc}
+            alt={data.symbol}
+            width={14}
+            height={14}
+            className="w-[14px] h-[14px] rounded-[2px] object-cover"
+          />
         ) : (
           <span className="text-[14px] leading-none mb-[1px]">{data.emojiFlag}</span>
         )}
