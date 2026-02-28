@@ -8,11 +8,11 @@ export default function IconCircleButton({
   label: string;
 }) {
   return (
-    <button className="tap flex w-full min-w-0 flex-col items-center gap-1.5 min-[360px]:gap-2">
-      <div className="flex h-10 w-10 items-center justify-center rounded-full glass min-[360px]:h-12 min-[360px]:w-12">
+    <button className="tap flex w-full min-w-0 flex-col items-center gap-1 min-[360px]:gap-1.5">
+      <div className="flex h-9 w-9 items-center justify-center rounded-full glass min-[360px]:h-10 min-[360px]:w-10">
         {icon}
       </div>
-      <div className="max-w-full text-center text-[10px] leading-tight text-white/70 min-[360px]:text-[11px]">{label}</div>
+      <div className="max-w-[4.5rem] text-center text-[9px] leading-[1.15] text-white/70 min-[360px]:text-[10px]">{label}</div>
     </button>
   );
 }
