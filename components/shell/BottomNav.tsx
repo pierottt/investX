@@ -2,72 +2,59 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Globe, ArrowRightLeft, ArrowUpDown, Heart, PieChart } from "lucide-react";
+import { BarChart3, Compass, Heart, Home, PieChart } from "lucide-react";
 
 const tabs = [
   { href: "/", label: "Home", Icon: Home },
-  { href: "/markets", label: "Market", Icon: Globe },
+  { href: "/markets", label: "Discover", Icon: Compass },
+  { href: "/trade", label: "Trade", Icon: BarChart3 },
   { href: "/watchlist", label: "Watchlist", Icon: Heart },
-  { href: "/portfolio", label: "Portfolio", Icon: PieChart }
+  { href: "/portfolio", label: "Portfolio", Icon: PieChart },
 ];
 
 export default function BottomNav() {
   const pathname = usePathname();
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
-  const isTradeActive = pathname.startsWith("/trade");
+  const hideOnStockDetail = pathname.startsWith("/stocks/");
+
+  if (hideOnStockDetail) {
+    return null;
+  }
 
   return (
-    <div
-      className="fixed bottom-0 left-1/2 z-40 w-full -translate-x-1/2"
-      style={{ maxWidth: 420 }}
-    >
-      <div className="px-2 pb-[calc(0.375rem+env(safe-area-inset-bottom))] min-[360px]:px-3 min-[360px]:pb-[calc(0.5rem+env(safe-area-inset-bottom))] min-[390px]:px-4">
-        <div className="relative rounded-3xl glass px-2 py-2 shadow-glow min-[360px]:px-4 min-[360px]:py-3 bg-background/80 backdrop-blur-xl border border-white/10">
-          <Link
-            href="/trade"
-            className="tap absolute -top-5 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full shadow-[0_0_20px_rgba(79,70,229,0.5),inset_0_4px_10px_rgba(255,255,255,0.4)] bg-gradient-to-tr from-indigo-950 via-blue-700 to-blue-200 min-[360px]:-top-6 min-[360px]:h-16 min-[360px]:w-16 border border-white/20 transition-transform active:scale-95"
-            aria-label="Trade"
-          >
-            {isTradeActive ? (
-              <ArrowUpDown strokeWidth={2.5} className="h-6 w-6 text-white min-[360px]:h-7 min-[360px]:w-7" />
-            ) : (
-              <ArrowRightLeft strokeWidth={2.5} className="h-6 w-6 text-white min-[360px]:h-7 min-[360px]:w-7" />
-            )}
-          </Link>
-
-          <div className="flex items-end justify-between pt-1">
-            {tabs.slice(0, 2).map(({ href, label, Icon }) => {
+    <div className="fixed bottom-0 left-1/2 z-40 w-full -translate-x-1/2" style={{ maxWidth: 420 }}>
+      <div className="px-4 pb-[calc(0.85rem+env(safe-area-inset-bottom))] min-[360px]:px-5 min-[360px]:pb-[calc(0.95rem+env(safe-area-inset-bottom))]">
+        <nav
+          aria-label="Bottom navigation"
+          className="rounded-[2.15rem] border border-white/[0.04] bg-[linear-gradient(180deg,rgba(23,25,34,0.96)_0%,rgba(18,20,29,0.98)_100%)] px-2 py-2 shadow-[0_18px_48px_rgba(0,0,0,0.52),inset_0_1px_0_rgba(255,255,255,0.025)] backdrop-blur-[30px]"
+        >
+          <div className="flex items-stretch justify-between gap-1">
+            {tabs.map(({ href, label, Icon }) => {
               const active = isActive(href);
-              return (
-                <Link key={href} href={href} className="tap flex w-1/5 flex-col items-center gap-1 min-[360px]:gap-1.5">
-                  <Icon className={`h-5 w-5 min-[360px]:h-6 min-[360px]:w-6 ${active ? "text-[#a78bfa]" : "text-white/55"}`} />
-                  <span className={`text-center text-[10px] leading-tight min-[360px]:text-[11px] font-medium ${active ? "text-[#a78bfa]" : "text-white/55"}`}>
-                    {label}
-                  </span>
-                </Link>
-              );
-            })}
 
-            <div className="flex w-1/5 flex-col items-center justify-end gap-1 min-[360px]:gap-1.5" aria-hidden="true">
-              <div className="h-5 min-[360px]:h-6" />
-              <span className={`text-center text-[10px] leading-tight min-[360px]:text-[11px] font-medium ${isTradeActive ? "text-[#a78bfa]" : "text-white/55"}`}>
-                Trade
-              </span>
-            </div>
-
-            {tabs.slice(2).map(({ href, label, Icon }) => {
-              const active = isActive(href);
               return (
-                <Link key={href} href={href} className="tap flex w-1/5 flex-col items-center gap-1 min-[360px]:gap-1.5">
-                  <Icon className={`h-5 w-5 min-[360px]:h-6 min-[360px]:w-6 ${active ? "text-[#a78bfa]" : "text-white/55"}`} />
-                  <span className={`text-center text-[10px] leading-tight min-[360px]:text-[11px] font-medium ${active ? "text-[#a78bfa]" : "text-white/55"}`}>
+                <Link
+                  key={href}
+                  href={href}
+                  aria-current={active ? "page" : undefined}
+                  className={`tap flex min-w-0 flex-1 flex-col items-center justify-center gap-1.5 rounded-[1.6rem] px-1 py-2.5 text-center transition-colors min-[360px]:gap-2 min-[360px]:py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8a7dff]/45 focus-visible:ring-inset ${
+                    active
+                      ? "bg-transparent text-[#7e73ff]"
+                      : "text-[#737995] hover:bg-white/[0.012] hover:text-white/78"
+                  }`}
+                >
+                  <Icon
+                    strokeWidth={active ? 2.5 : 2.15}
+                    className={`h-6 w-6 shrink-0 min-[360px]:h-7 min-[360px]:w-7 ${active ? "drop-shadow-[0_0_10px_rgba(126,115,255,0.24)]" : ""}`}
+                  />
+                  <span className="text-[9px] font-medium leading-none tracking-[-0.03em] min-[360px]:text-[10px]">
                     {label}
                   </span>
                 </Link>
               );
             })}
           </div>
-        </div>
+        </nav>
       </div>
     </div>
   );
