@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Mail, Search } from "lucide-react";
+import InexActionButton from "@/components/shell/InexActionButton";
 import { portfolio } from "@/lib/data/mock";
 
 const emptyStateTabs = ["Assets", "Orders", "Transactions", "Cash Balance"];
@@ -39,6 +40,10 @@ export default function PortfolioPage() {
               <Mail className="h-5 w-5" />
               <span className="absolute right-1.5 top-2 h-1.5 w-1.5 rounded-full bg-[#ff5d72]" />
             </button>
+            <InexActionButton
+              className="h-8 w-8 rounded-full border border-[#5260bf]/55 bg-[#0f1730]/78 shadow-[0_0_14px_rgba(90,108,230,0.24)] min-[360px]:h-9 min-[360px]:w-9"
+              iconClassName="h-4.5 w-4.5 min-[360px]:h-5 min-[360px]:w-5"
+            />
           </div>
         </header>
 

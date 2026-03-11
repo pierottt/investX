@@ -1,4 +1,5 @@
 import { Search, Mail } from "lucide-react";
+import InexActionButton from "./InexActionButton";
 
 export default function TopBar({
   title = "investX",
@@ -29,6 +30,7 @@ export default function TopBar({
         >
           <Mail className="h-4 w-4 text-white/80" />
         </button>
+        <InexActionButton className="h-8 w-8 rounded-full glass min-[360px]:h-9 min-[360px]:w-9" iconClassName="h-4 w-4" />
         <div
           className="h-8 w-8 rounded-full border border-white/10 bg-white/10 min-[360px]:h-9 min-[360px]:w-9"
           aria-label="Profile"

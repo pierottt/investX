@@ -4,7 +4,7 @@
 
 ### Theme
 - Dark mode only
-- Neon fintech feel (subtle glows, gradients, glass cards)
+- Premium brokerage dark mode (ink-like navy surfaces, restrained indigo accents, minimal glow)
 
 ---
 
@@ -12,31 +12,36 @@
 Use CSS variables or Tailwind theme extensions.
 
 ### Core
-- Background base: `#0B0D14`
-- Background deep: `#121426`
-- Panel/Card: `#151A2E`
+- Background base: `#05070D`
+- Background deep: `#0C111D`
+- Panel/Card: `#131722`
+- Panel/Card alt: `#171B27`
+- Editorial panel tint: `rgba(26,31,50,0.55)`
 - Panel border: `rgba(255,255,255,0.06)`
-- Text primary: `#E5E7EB`
-- Text secondary: `#9CA3AF`
+- Text primary: `rgba(255,255,255,0.88-0.90)`
+- Text secondary: `rgba(255,255,255,0.70-0.80)`
+- Text tertiary / muted: `rgba(255,255,255,0.42-0.58)`
 
-### Accents (Gradient)
-- Purple: `#7C3AED`
-- Indigo: `#6366F1`
-- Blue: `#2563EB`
-- Cyan: `#22D3EE`
+### Accents
+- Indigo primary: `#6F73F8`
+- Indigo soft: `#9B9FF5`
+- Indigo label: `#A2A7FF`
+- Indigo border: `#5F63B6`
+- Indigo deep fill: `#2F286A`
 
 ### Signals
-- Gain green: `#22C55E`
-- Loss red: `#EF4444`
+- Gain green: `#39C38A`
+- Alert / unread red: `#FF5D72`
+- Editorial highlight bronze: `#9B7B42`
 
 ---
 
 ## Gradients
 ### Background gradient
-- `linear-gradient(180deg, #0B0D14 0%, #121426 60%, #0B0D14 100%)`
+- `radial-gradient(circle at 50% -18%, rgba(84,90,210,0.26) 0%, rgba(8,10,16,0.92) 36%, #05070D 100%)`
 
-### Primary accent gradient
-- `linear-gradient(135deg, #7C3AED 0%, #2563EB 60%, #22D3EE 100%)`
+### Accent treatment
+- Prefer solid indigo/lilac accents over multi-color gradients
 
 ---
 
@@ -53,7 +58,8 @@ Use CSS variables or Tailwind theme extensions.
 - soft + subtle: `0 10px 30px rgba(0,0,0,0.45)`
 
 ### Glow (accent)
-- use sparingly: `0 0 18px rgba(124,58,237,0.25)` or `rgba(37,99,235,0.22)`
+- use sparingly; rely on the page-level indigo bloom instead of neon glows
+- optional inset hairline: `inset 0 0 0 1px rgba(255,255,255,0.03)`
 
 ---
 
@@ -77,14 +83,14 @@ Use CSS variables or Tailwind theme extensions.
 ## UI Patterns
 
 ### Glass Card
-- Background: `rgba(21,26,46,0.72)`
-- Backdrop blur: `backdrop-blur-md`
+- Background: `#131722`, `#171B27`, or `rgba(26,31,50,0.55)`
+- Backdrop blur: avoid by default
 - Border: `1px solid rgba(255,255,255,0.06)`
 
 ### Active Tab
 - Text brighter
-- Underline or pill highlight using accent gradient
-- Subtle glow
+- Use solid indigo/lilac fill, border, or text emphasis
+- Keep emphasis crisp; avoid visible neon glow
 
 ### Pressed State
 - scale down to 0.96
@@ -95,7 +101,7 @@ Use CSS variables or Tailwind theme extensions.
 ## Tailwind Setup (Recommended)
 - Extend theme: colors, radii
 - Add utilities for:
-  - `bg-app-gradient`
-  - `bg-accent-gradient`
-  - `shadow-glow`
+  - `bg-app-radial`
+  - `bg-accent-indigo`
+  - `border-soft`
   - `glass-card`

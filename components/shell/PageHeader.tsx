@@ -1,4 +1,5 @@
 import { Mail, Search } from "lucide-react";
+import InexActionButton from "./InexActionButton";
 
 export interface PageHeaderProps {
   title: string;
@@ -19,6 +20,7 @@ export default function PageHeader({ title, className = "", showActions = true }
           <button type="button" className="icon-action-button focus-accent" aria-label="Inbox">
             <Mail className="h-5 w-5" />
           </button>
+          <InexActionButton className="icon-action-button" />
         </div>
       ) : null}
     </div>

@@ -1,4 +1,5 @@
 import { BadgeAlert, Bitcoin, BriefcaseBusiness, Grid2x2, Mail, MessageSquareText, Search, Shuffle, Waves, X } from "lucide-react";
+import InexActionButton from "@/components/shell/InexActionButton";
 
 const marketStrip = [
   { label: "SET", change: "+1.65%" },
@@ -52,6 +53,7 @@ export default function HomePage() {
               <Mail className="h-5 w-5" />
               <span className="absolute right-1.5 top-2 h-1.5 w-1.5 rounded-full bg-[#ff5d72]" />
             </button>
+            <InexActionButton />
           </div>
         </section>
 
