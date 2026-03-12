@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ChartLine, CircleDollarSign, Mic, Plus, SendHorizontal, TrendingDown, TrendingUp } from "lucide-react";
+import { ArrowLeft, ChartLine, CircleDollarSign, Mic, Plus, SendHorizontal, TrendingDown, TrendingUp, X } from "lucide-react";
 
 type SituationId = 1 | 2 | 3 | 4;
 type ChatTheme = "instagram" | "line" | "messenger";
@@ -347,10 +347,13 @@ export default function InexPage() {
   const [draft, setDraft] = useState("");
   const [hasStartedTyping, setHasStartedTyping] = useState(false);
   const [openSources, setOpenSources] = useState<Record<string, boolean>>({});
+  const [isSuggestionSheetDismissed, setIsSuggestionSheetDismissed] = useState(false);
+  const [keyboardOffset, setKeyboardOffset] = useState(0);
+  const composerInputRef = useRef<HTMLInputElement>(null);
 
   const active = situationOptions.find((option) => option.id === activeSituation) ?? situationOptions[0];
   const activeTheme = themeStyles[active.theme];
-  const showSuggestedQuestions = !hasStartedTyping && draft.length === 0;
+  const showSuggestedQuestions = !hasStartedTyping && draft.length === 0 && !isSuggestionSheetDismissed;
   const suggestedQuestions = suggestedQuestionsBySituation[activeSituation];
   const hasProposal = active.messages.some((message) => message.proposal);
   const isPortfolioShowcase = activeSituation === 4;
@@ -366,8 +369,32 @@ export default function InexPage() {
   const sourcesItemClassName = isPortfolioShowcase
     ? "flex items-start gap-2 rounded-xl border border-white/[0.04] bg-white/[0.03] px-2 py-1.5 text-[8px] text-[rgba(255,255,255,0.72)]"
     : "flex items-start gap-2 rounded-xl border border-white/[0.04] bg-white/[0.03] px-2.5 py-2 text-[10px] text-[rgba(255,255,255,0.72)]";
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.visualViewport) return;
+
+    const viewport = window.visualViewport;
+    const syncKeyboardOffset = () => {
+      const rawInset = Math.max(0, Math.round(window.innerHeight - viewport.height - viewport.offsetTop));
+      const nextOffset = rawInset > 70 ? rawInset : 0;
+      setKeyboardOffset((currentOffset) => (currentOffset === nextOffset ? currentOffset : nextOffset));
+    };
+
+    syncKeyboardOffset();
+    viewport.addEventListener("resize", syncKeyboardOffset);
+    viewport.addEventListener("scroll", syncKeyboardOffset);
+    window.addEventListener("orientationchange", syncKeyboardOffset);
+
+    return () => {
+      viewport.removeEventListener("resize", syncKeyboardOffset);
+      viewport.removeEventListener("scroll", syncKeyboardOffset);
+      window.removeEventListener("orientationchange", syncKeyboardOffset);
+    };
+  }, []);
+
   const cycleSituation = () => {
     setActiveSituation((current) => getNextSituation(current));
+    setIsSuggestionSheetDismissed(false);
   };
   const toggleSources = (messageId: string) => {
     setOpenSources((current) => ({
@@ -378,12 +405,15 @@ export default function InexPage() {
   const applySuggestedQuestion = (question: string) => {
     setDraft(question);
     setHasStartedTyping(true);
+    setIsSuggestionSheetDismissed(true);
   };
   const hasDraft = Boolean(draft.trim());
+  const chatBottomPadding = `calc(env(safe-area-inset-bottom) + 6.5rem + ${keyboardOffset}px)`;
+  const composerBottom = `calc(env(safe-area-inset-bottom) + 0.25rem + ${keyboardOffset}px)`;
 
   return (
     <div className="page-scroll no-scrollbar bg-[radial-gradient(circle_at_50%_-18%,rgba(84,90,210,0.26)_0%,rgba(8,10,16,0.92)_36%,#05070D_100%)]">
-      <div className="page-x flex min-h-full flex-col pb-[calc(env(safe-area-inset-bottom)+6.5rem)] pt-safe-top">
+      <div className="page-x flex min-h-full flex-col pt-safe-top" style={{ paddingBottom: chatBottomPadding }}>
         <header className="flex items-center justify-between">
           <Link
             href="/"
@@ -405,29 +435,46 @@ export default function InexPage() {
             className={`rounded-2xl border ${activeTheme.thread} ${
               showSuggestedQuestions
                 ? isPortfolioShowcase
-                  ? "mt-0 flex min-h-[80vh] items-center justify-center p-3"
-                  : "mt-0 flex min-h-[80vh] items-center justify-center p-4"
+                  ? "mt-0 flex min-h-[80vh] flex-1 items-stretch justify-stretch p-2.5"
+                  : "mt-0 flex min-h-[80vh] flex-1 items-stretch justify-stretch p-3"
                 : isPortfolioShowcase
                   ? "mt-2 space-y-1.5 p-2"
                   : "mt-3 space-y-2.5 p-2.5"
             }`}
           >
             {showSuggestedQuestions ? (
-              <div className="mx-auto flex w-full max-w-[440px] flex-col items-center gap-3 text-center">
-                <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-[rgba(255,255,255,0.5)]">
-                  Suggested question
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-2">
-                  {suggestedQuestions.map((question) => (
-                    <button
-                      key={question}
-                      type="button"
-                      onClick={() => applySuggestedQuestion(question)}
-                      className="tap rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-[11px] text-[rgba(255,255,255,0.86)] transition hover:border-[#5F63B6]/60 hover:bg-[#232A45]"
-                    >
-                      {question}
-                    </button>
-                  ))}
+              <div className="mx-auto flex h-[min(78svh,680px)] w-full max-w-[440px] flex-col rounded-[24px] border border-white/[0.06] bg-[linear-gradient(180deg,#151A29_0%,#0E1422_100%)] p-3 shadow-[0_14px_34px_rgba(0,0,0,0.42)] min-[390px]:p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-[rgba(255,255,255,0.5)]">
+                      Suggested questions
+                    </p>
+                    <p className="mt-1 text-[12px] text-[rgba(255,255,255,0.72)] min-[390px]:text-[13px]">
+                      Pick one to start instantly.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsSuggestionSheetDismissed(true)}
+                    className="tap inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.03] text-[rgba(255,255,255,0.65)] transition hover:border-white/[0.14] hover:text-white"
+                    aria-label="Dismiss suggested questions"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="no-scrollbar mt-3 flex-1 overflow-y-auto pr-0.5">
+                  <div className="grid gap-2">
+                    {suggestedQuestions.map((question) => (
+                      <button
+                        key={question}
+                        type="button"
+                        onClick={() => applySuggestedQuestion(question)}
+                        className="tap w-full rounded-2xl border border-white/[0.08] bg-white/[0.03] px-3 py-3 text-left text-[12px] text-[rgba(255,255,255,0.88)] transition hover:border-[#5F63B6]/60 hover:bg-[#232A45]"
+                      >
+                        {question}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             ) : (
@@ -801,7 +848,7 @@ export default function InexPage() {
           Switch situation
         </button>
       </div>
-      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+0.25rem)] z-30 flex justify-center">
+      <div className="pointer-events-none fixed inset-x-0 z-30 flex justify-center" style={{ bottom: composerBottom }}>
         <section className="pointer-events-auto w-full max-w-[420px] px-3 min-[360px]:px-4 min-[390px]:px-5">
           <div className="rounded-[22px] border border-white/[0.06] bg-[#131722] p-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
             <div className="flex items-end gap-2">
@@ -814,7 +861,13 @@ export default function InexPage() {
               </button>
               <div className="flex min-h-10 flex-1 items-center rounded-[18px] border border-white/[0.06] bg-[#0C111D] px-3">
                 <input
+                  ref={composerInputRef}
                   value={draft}
+                  onFocus={() => {
+                    requestAnimationFrame(() => {
+                      composerInputRef.current?.scrollIntoView({ block: "nearest" });
+                    });
+                  }}
                   onChange={(event) => {
                     const nextDraft = event.target.value;
                     setDraft(nextDraft);
