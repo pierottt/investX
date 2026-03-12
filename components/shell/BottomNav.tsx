@@ -17,8 +17,9 @@ export default function BottomNav() {
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
   const hideOnStockDetail = pathname.startsWith("/stocks/");
   const hideOnCopyTradeDetail = pathname.startsWith("/trade/copy-trade/");
+  const hideOnInex = pathname === "/inex";
 
-  if (hideOnStockDetail || hideOnCopyTradeDetail) {
+  if (hideOnStockDetail || hideOnCopyTradeDetail || hideOnInex) {
     return null;
   }
 

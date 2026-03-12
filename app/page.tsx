@@ -1,4 +1,6 @@
-import { BadgeAlert, Bitcoin, BriefcaseBusiness, Grid2x2, Mail, MessageSquareText, Search, Shuffle, Waves, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { BadgeAlert, Bitcoin, BriefcaseBusiness, Grid2x2, Mail, MessageSquareText, Search, Shuffle, Waves } from "lucide-react";
 import InexActionButton from "@/components/shell/InexActionButton";
 
 const marketStrip = [
@@ -107,20 +109,23 @@ export default function HomePage() {
         </section>
 
         <section className="mt-3.5 rounded-[18px] border border-[#9b7b42]/70 bg-[#1a1f32]/55 p-3 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)] min-[360px]:p-3.5">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <div className="mb-1.5 flex items-center gap-2 text-[12px] text-[#9ea7d0] min-[360px]:text-[13px]">
-                <BadgeAlert className="h-3.5 w-3.5 text-[#6f73f8]" />
-                Evening Brief
+          <Link href="/inex/brief" className="tap block">
+            <article className="flex h-[100px] w-full items-center justify-between rounded-2xl border border-white/[0.06] bg-[#0d1220]/85 px-3.5 py-3 min-[360px]:px-4">
+              <div className="min-w-0 flex items-center gap-3">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#4f45aa]/55 bg-[#11142a]">
+                  <Image src="/inex/icon.svg" alt="INEX logo" width={32} height={32} className="h-7 w-7" />
+                </span>
+                <div className="min-w-0">
+                  <p className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#8f97c6] min-[360px]:text-[11px]">
+                    <BadgeAlert className="h-3.5 w-3.5 text-[#6f73f8]" />
+                    INEX
+                  </p>
+                  <h3 className="mt-1 truncate text-[20px] font-semibold leading-none tracking-tight text-white/94 min-[360px]:text-[22px]">Evening Brief</h3>
+                </div>
               </div>
-              <p className="text-[15px] leading-snug text-white/88 min-[360px]:text-[16px]">
-                ฟิวเจอร์สหรัฐ ฟื้นตัว หลัง Trump ส่งสัญญาณสงครามบัตรน้อยๆ “เร็วมาก” ตลาดลดแรงกังวล Oil Shock
-              </p>
-            </div>
-            <button type="button" className="tap mt-0.5 flex h-9 w-9 items-center justify-center text-white/45 hover:text-white/70">
-              <X className="h-4 w-4" />
-            </button>
-          </div>
+              <p className="shrink-0 text-[12px] font-medium text-[#a2a7ff] min-[360px]:text-[13px]">Open</p>
+            </article>
+          </Link>
         </section>
 
         <section className="mt-6 min-[360px]:mt-7">
