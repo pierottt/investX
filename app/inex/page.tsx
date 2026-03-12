@@ -387,7 +387,7 @@ export default function InexPage() {
   const hasDraft = Boolean(draft.trim());
 
   return (
-    <div className="page-scroll no-scrollbar bg-[radial-gradient(circle_at_50%_-18%,rgba(84,90,210,0.26)_0%,rgba(8,10,16,0.92)_36%,#05070D_100%)]">
+    <div className="h-full overflow-y-auto overscroll-contain no-scrollbar [-webkit-overflow-scrolling:touch] bg-[radial-gradient(circle_at_50%_-18%,rgba(84,90,210,0.26)_0%,rgba(8,10,16,0.92)_36%,#05070D_100%)]">
       <div className="page-x flex min-h-full flex-col pt-safe-top">
         <header className="flex items-center justify-between">
           <Link
@@ -418,7 +418,7 @@ export default function InexPage() {
             }`}
           >
             {showSuggestedQuestions ? (
-              <div className="mx-auto flex h-[min(78svh,680px)] w-full max-w-[440px] flex-col rounded-[24px] border border-white/[0.06] bg-[linear-gradient(180deg,#151A29_0%,#0E1422_100%)] p-3 shadow-[0_14px_34px_rgba(0,0,0,0.42)] min-[390px]:p-4">
+              <div className="mx-auto flex h-[min(88svh,760px)] max-h-full w-full max-w-[440px] flex-col rounded-[24px] border border-white/[0.06] bg-[linear-gradient(180deg,#151A29_0%,#0E1422_100%)] p-3 shadow-[0_14px_34px_rgba(0,0,0,0.42)] min-[390px]:p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-[rgba(255,255,255,0.5)]">
