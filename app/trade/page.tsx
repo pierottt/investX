@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Mail, Search } from "lucide-react";
 import InexActionButton from "@/components/shell/InexActionButton";
+import CopyTradeShowcase from "@/components/trade/CopyTradeShowcase";
 import TopPickCard from "@/components/trade/TopPickCard";
 import IndexLeaderboard from "@/components/trade/IndexLeaderboard";
 import SegmentedPill from "@/components/ui/SegmentedPill";
@@ -14,6 +15,8 @@ import {
   tradeTopPick,
   tradeIndexSummary,
   tradeQuoteRows,
+  copyTradeInvestors,
+  copyTradeSortOptions,
   type TradeLeaderboardSegment,
 } from "@/lib/data/mock";
 
@@ -66,6 +69,18 @@ export default function TradePage() {
         />
 
         <TopPickCard topPick={tradeTopPick} className="mt-3" />
+
+        <CopyTradeShowcase
+          title="Copy Trade"
+          description="Discover elite investor portfolios, preview a few names here, then open the full directory to explore more strategies."
+          investors={copyTradeInvestors}
+          sortOptions={copyTradeSortOptions}
+          previewCount={4}
+          detailHrefBase="/trade/copy-trade"
+          actionHref="/trade/copy-trade"
+          actionLabel="View all investors"
+          className="mt-3"
+        />
 
         <IndexLeaderboard summary={tradeIndexSummary} segments={listSegments} activeSegment={tradeIndexSummary.segment} rows={tradeQuoteRows} className="mt-3" />
       </div>

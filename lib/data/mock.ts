@@ -87,6 +87,49 @@ export interface TradeQuoteRow {
   changePct: number;
 }
 
+export type CopyTradeSortOption = "Most Viewed" | "Recent Update";
+
+export interface CopyTradeAvatar {
+  initials: string;
+  background: string;
+  textColor?: string;
+}
+
+export interface CopyTradePerformanceWindow {
+  label: string;
+  returnPct: number;
+}
+
+export interface CopyTradeHolding {
+  ticker: string;
+  company: string;
+  weightPct: number;
+  returnPct: number;
+}
+
+export interface CopyTradeInvestor {
+  slug: string;
+  name: string;
+  thesis: string;
+  focusLabel: string;
+  strategyLabel: string;
+  updatedLabel: string;
+  riskLabel: string;
+  avatar: CopyTradeAvatar;
+  assetsUsd: number;
+  copiers: number;
+  winRatePct: number;
+  minCopyUsd: number;
+  yearlyReturnPct: number;
+  monthlyReturnPct: number;
+  mostViewedRank: number;
+  recentUpdateRank: number;
+  performancePoints: number[];
+  performanceWindows: CopyTradePerformanceWindow[];
+  tags: string[];
+  holdings: CopyTradeHolding[];
+}
+
 export type WatchlistCategory = "Stocks" | "ETFs" | "Funds" | "Bonds";
 export type WatchlistTrend = "up" | "down";
 
@@ -138,6 +181,296 @@ export const tradeQuoteRows: TradeQuoteRow[] = [
   { symbol: "AMD", company: "Advanced Micro Devices", price: 166.25, change: 6.33, changePct: 3.96 },
   { symbol: "AAPL", company: "Apple Inc", price: 233.87, change: 0.27, changePct: 0.12 },
 ];
+
+export const copyTradeSortOptions: CopyTradeSortOption[] = ["Most Viewed", "Recent Update"];
+
+export const copyTradeInvestors: CopyTradeInvestor[] = [
+  {
+    slug: "adam-insight",
+    name: "Adam Insight",
+    thesis: "Concentrated positions in platform tech names with recurring revenue and durable free-cash-flow expansion.",
+    focusLabel: "Invest most in Technology",
+    strategyLabel: "Long-term compounders",
+    updatedLabel: "Updated 2 hours ago",
+    riskLabel: "Moderate risk",
+    avatar: {
+      initials: "AI",
+      background: "linear-gradient(135deg, #7c3aed 0%, #312e81 100%)",
+    },
+    assetsUsd: 137830,
+    copiers: 1284,
+    winRatePct: 71,
+    minCopyUsd: 250,
+    yearlyReturnPct: 32.8,
+    monthlyReturnPct: 4.6,
+    mostViewedRank: 4,
+    recentUpdateRank: 2,
+    performancePoints: [78, 82, 86, 91, 94, 98, 102, 110, 117, 124, 131, 138],
+    performanceWindows: [
+      { label: "1M", returnPct: 4.6 },
+      { label: "6M", returnPct: 14.2 },
+      { label: "1Y", returnPct: 32.8 },
+      { label: "All", returnPct: 68.4 },
+    ],
+    tags: ["Technology", "US equities", "High conviction"],
+    holdings: [
+      { ticker: "NVDA", company: "Nvidia Corp", weightPct: 18.4, returnPct: 39.1 },
+      { ticker: "MSFT", company: "Microsoft", weightPct: 16.7, returnPct: 24.6 },
+      { ticker: "META", company: "Meta Platforms", weightPct: 12.1, returnPct: 18.3 },
+    ],
+  },
+  {
+    slug: "baillie-gifford",
+    name: "Baillie Gifford",
+    thesis: "Global growth approach focused on companies that can outgrow the market for multi-year periods.",
+    focusLabel: "Invest most in Technology",
+    strategyLabel: "Global growth",
+    updatedLabel: "Updated today",
+    riskLabel: "Balanced risk",
+    avatar: {
+      initials: "BG",
+      background: "linear-gradient(135deg, #f5f5f5 0%, #d4d4d8 100%)",
+      textColor: "#111827",
+    },
+    assetsUsd: 94130000000,
+    copiers: 8621,
+    winRatePct: 67,
+    minCopyUsd: 500,
+    yearlyReturnPct: 21.4,
+    monthlyReturnPct: 2.1,
+    mostViewedRank: 1,
+    recentUpdateRank: 3,
+    performancePoints: [96, 98, 99, 101, 100, 103, 108, 111, 113, 116, 118, 121],
+    performanceWindows: [
+      { label: "1M", returnPct: 2.1 },
+      { label: "6M", returnPct: 9.8 },
+      { label: "1Y", returnPct: 21.4 },
+      { label: "All", returnPct: 54.9 },
+    ],
+    tags: ["Global", "Growth", "Large cap"],
+    holdings: [
+      { ticker: "AMZN", company: "Amazon", weightPct: 9.4, returnPct: 16.4 },
+      { ticker: "TSLA", company: "Tesla", weightPct: 8.7, returnPct: -4.2 },
+      { ticker: "SHOP", company: "Shopify", weightPct: 7.9, returnPct: 12.7 },
+    ],
+  },
+  {
+    slug: "bill-gates",
+    name: "Bill Gates",
+    thesis: "Quality industrial and infrastructure exposure with predictable demand and measured valuation discipline.",
+    focusLabel: "Invest most in Industrials",
+    strategyLabel: "Defensive growth",
+    updatedLabel: "Updated yesterday",
+    riskLabel: "Low volatility",
+    avatar: {
+      initials: "BG",
+      background: "linear-gradient(135deg, #8b5cf6 0%, #111827 100%)",
+    },
+    assetsUsd: 37160000000,
+    copiers: 5120,
+    winRatePct: 64,
+    minCopyUsd: 300,
+    yearlyReturnPct: 16.9,
+    monthlyReturnPct: 1.7,
+    mostViewedRank: 3,
+    recentUpdateRank: 4,
+    performancePoints: [88, 89, 91, 92, 94, 95, 97, 100, 102, 104, 105, 107],
+    performanceWindows: [
+      { label: "1M", returnPct: 1.7 },
+      { label: "6M", returnPct: 8.9 },
+      { label: "1Y", returnPct: 16.9 },
+      { label: "All", returnPct: 42.3 },
+    ],
+    tags: ["Industrials", "Infrastructure", "Large cap"],
+    holdings: [
+      { ticker: "CAT", company: "Caterpillar", weightPct: 12.2, returnPct: 9.6 },
+      { ticker: "WM", company: "Waste Management", weightPct: 9.8, returnPct: 11.4 },
+      { ticker: "CP", company: "Canadian Pacific", weightPct: 8.1, returnPct: 7.2 },
+    ],
+  },
+  {
+    slug: "cathie-wood",
+    name: "Cathie Wood",
+    thesis: "Seeks asymmetric upside from disruptive innovation across AI, robotics, and next-generation internet platforms.",
+    focusLabel: "Invest most in Innovation",
+    strategyLabel: "High-beta thematic",
+    updatedLabel: "Updated 5 hours ago",
+    riskLabel: "High risk",
+    avatar: {
+      initials: "CW",
+      background: "linear-gradient(135deg, #9333ea 0%, #2563eb 100%)",
+    },
+    assetsUsd: 12800000000,
+    copiers: 7420,
+    winRatePct: 58,
+    minCopyUsd: 200,
+    yearlyReturnPct: 27.2,
+    monthlyReturnPct: 6.3,
+    mostViewedRank: 2,
+    recentUpdateRank: 1,
+    performancePoints: [70, 75, 72, 79, 84, 87, 91, 96, 100, 108, 113, 119],
+    performanceWindows: [
+      { label: "1M", returnPct: 6.3 },
+      { label: "6M", returnPct: 18.8 },
+      { label: "1Y", returnPct: 27.2 },
+      { label: "All", returnPct: 61.5 },
+    ],
+    tags: ["Innovation", "AI", "Momentum"],
+    holdings: [
+      { ticker: "TSLA", company: "Tesla", weightPct: 11.4, returnPct: -2.7 },
+      { ticker: "PLTR", company: "Palantir", weightPct: 9.6, returnPct: 33.5 },
+      { ticker: "COIN", company: "Coinbase", weightPct: 8.8, returnPct: 21.2 },
+    ],
+  },
+  {
+    slug: "terry-smith",
+    name: "Terry Smith",
+    thesis: "Owns durable consumer and software franchises with pricing power, high returns on capital, and low turnover.",
+    focusLabel: "Invest most in Consumer Staples",
+    strategyLabel: "Quality compounders",
+    updatedLabel: "Updated 3 days ago",
+    riskLabel: "Balanced risk",
+    avatar: {
+      initials: "TS",
+      background: "linear-gradient(135deg, #0f766e 0%, #1f2937 100%)",
+    },
+    assetsUsd: 28600000000,
+    copiers: 3980,
+    winRatePct: 69,
+    minCopyUsd: 400,
+    yearlyReturnPct: 18.1,
+    monthlyReturnPct: 1.9,
+    mostViewedRank: 6,
+    recentUpdateRank: 6,
+    performancePoints: [92, 93, 94, 95, 96, 98, 99, 101, 103, 105, 107, 109],
+    performanceWindows: [
+      { label: "1M", returnPct: 1.9 },
+      { label: "6M", returnPct: 7.4 },
+      { label: "1Y", returnPct: 18.1 },
+      { label: "All", returnPct: 46.7 },
+    ],
+    tags: ["Quality", "Low turnover", "Global"],
+    holdings: [
+      { ticker: "MSFT", company: "Microsoft", weightPct: 13.9, returnPct: 24.6 },
+      { ticker: "PG", company: "Procter & Gamble", weightPct: 10.4, returnPct: 8.3 },
+      { ticker: "META", company: "Meta Platforms", weightPct: 9.1, returnPct: 18.3 },
+    ],
+  },
+  {
+    slug: "warren-buffett",
+    name: "Warren Buffett",
+    thesis: "Value-oriented portfolio of high-quality cash generators with disciplined capital allocation and strong moats.",
+    focusLabel: "Invest most in Financials",
+    strategyLabel: "Value and cash flow",
+    updatedLabel: "Updated 1 day ago",
+    riskLabel: "Low volatility",
+    avatar: {
+      initials: "WB",
+      background: "linear-gradient(135deg, #f59e0b 0%, #78350f 100%)",
+    },
+    assetsUsd: 312400000000,
+    copiers: 16840,
+    winRatePct: 73,
+    minCopyUsd: 1000,
+    yearlyReturnPct: 14.6,
+    monthlyReturnPct: 1.2,
+    mostViewedRank: 5,
+    recentUpdateRank: 5,
+    performancePoints: [98, 99, 100, 100, 101, 102, 103, 104, 106, 107, 109, 111],
+    performanceWindows: [
+      { label: "1M", returnPct: 1.2 },
+      { label: "6M", returnPct: 6.8 },
+      { label: "1Y", returnPct: 14.6 },
+      { label: "All", returnPct: 39.5 },
+    ],
+    tags: ["Value", "Cash flow", "Blue chip"],
+    holdings: [
+      { ticker: "AAPL", company: "Apple", weightPct: 23.5, returnPct: 12.4 },
+      { ticker: "AXP", company: "American Express", weightPct: 14.1, returnPct: 17.8 },
+      { ticker: "BAC", company: "Bank of America", weightPct: 11.6, returnPct: 5.9 },
+    ],
+  },
+  {
+    slug: "ray-dalio",
+    name: "Ray Dalio",
+    thesis: "Macro-balanced allocation built for resilience across inflation, growth slowdowns, and risk-on recoveries.",
+    focusLabel: "Invest most in Macro Allocation",
+    strategyLabel: "All-weather balance",
+    updatedLabel: "Updated 4 hours ago",
+    riskLabel: "Capital preservation",
+    avatar: {
+      initials: "RD",
+      background: "linear-gradient(135deg, #f59e0b 0%, #1f2937 100%)",
+    },
+    assetsUsd: 18750000000,
+    copiers: 4860,
+    winRatePct: 68,
+    minCopyUsd: 500,
+    yearlyReturnPct: 13.8,
+    monthlyReturnPct: 2.6,
+    mostViewedRank: 7,
+    recentUpdateRank: 3,
+    performancePoints: [84, 86, 85, 87, 89, 91, 92, 94, 96, 97, 99, 101],
+    performanceWindows: [
+      { label: "1M", returnPct: 2.6 },
+      { label: "6M", returnPct: 8.2 },
+      { label: "1Y", returnPct: 13.8 },
+      { label: "All", returnPct: 35.6 },
+    ],
+    tags: ["Macro", "Risk parity", "Defensive"],
+    holdings: [
+      { ticker: "GLD", company: "SPDR Gold Shares", weightPct: 12.4, returnPct: 9.1 },
+      { ticker: "SPY", company: "SPDR S&P 500 ETF", weightPct: 10.1, returnPct: 14.2 },
+      { ticker: "TLT", company: "20+ Year Treasury Bond ETF", weightPct: 8.9, returnPct: -1.8 },
+    ],
+  },
+  {
+    slug: "stanley-druckenmiller",
+    name: "Stanley Druckenmiller",
+    thesis: "Tactical portfolio with strong growth and semiconductor exposure, rotated aggressively when macro conditions shift.",
+    focusLabel: "Invest most in Quality Growth",
+    strategyLabel: "Tactical growth",
+    updatedLabel: "Updated 6 days ago",
+    riskLabel: "Active risk",
+    avatar: {
+      initials: "SD",
+      background: "linear-gradient(135deg, #60a5fa 0%, #1e1b4b 100%)",
+    },
+    assetsUsd: 12080000000,
+    copiers: 3560,
+    winRatePct: 72,
+    minCopyUsd: 300,
+    yearlyReturnPct: 23.7,
+    monthlyReturnPct: 3.4,
+    mostViewedRank: 8,
+    recentUpdateRank: 8,
+    performancePoints: [74, 76, 79, 81, 85, 88, 90, 94, 98, 102, 106, 111],
+    performanceWindows: [
+      { label: "1M", returnPct: 3.4 },
+      { label: "6M", returnPct: 15.1 },
+      { label: "1Y", returnPct: 23.7 },
+      { label: "All", returnPct: 58.3 },
+    ],
+    tags: ["Tactical", "Semis", "Momentum"],
+    holdings: [
+      { ticker: "NVDA", company: "Nvidia Corp", weightPct: 13.1, returnPct: 39.1 },
+      { ticker: "TSM", company: "Taiwan Semiconductor", weightPct: 10.2, returnPct: 19.7 },
+      { ticker: "MSFT", company: "Microsoft", weightPct: 8.7, returnPct: 24.6 },
+    ],
+  },
+];
+
+export const copyTradePreviewInvestors = copyTradeInvestors.slice(0, 4);
+
+export function getCopyTradeInvestorBySlug(slug: string) {
+  return copyTradeInvestors.find((investor) => investor.slug === slug) ?? null;
+}
+
+export function sortCopyTradeInvestors(investors: CopyTradeInvestor[], sort: CopyTradeSortOption) {
+  return [...investors].sort((left, right) =>
+    sort === "Most Viewed" ? left.mostViewedRank - right.mostViewedRank : left.recentUpdateRank - right.recentUpdateRank
+  );
+}
 
 export const watchlistItems: WatchlistItem[] = [
   {
