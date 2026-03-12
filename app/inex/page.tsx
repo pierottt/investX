@@ -4,9 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ChartLine, CircleDollarSign, Mic, Plus, SendHorizontal, TrendingDown, TrendingUp } from "lucide-react";
 
-type SituationId = 1 | 2 | 3;
+type SituationId = 1 | 2 | 3 | 4;
 type ChatTheme = "instagram" | "line" | "messenger";
 type MessageSender = "user" | "assistant";
+type ProposalSide = "buy" | "sell" | "portfolio";
+const RING_COLORS = ["#1C7CF3", "#6D38C5", "#E7E91F", "#46CFE5", "#8E8EFF", "#B44BEF", "#A7D736", "#6B7280"];
 
 interface ChatMessage {
   id: string;
@@ -18,11 +20,16 @@ interface ChatMessage {
   proposal?: {
     stockName: string;
     symbol: string;
-    side: "buy" | "sell";
+    side: ProposalSide;
     summary: string;
     stats: Array<{
       label: string;
       value: string;
+    }>;
+    allocations?: Array<{
+      asset: string;
+      weight: string;
+      reason: string;
     }>;
     primaryAction: string;
     secondaryAction: string;
@@ -201,11 +208,105 @@ const situationOptions: SituationOption[] = [
     ],
     composerPlaceholder: "Type a sell order request...",
   },
+  {
+    id: 4,
+    theme: "instagram",
+    messages: [
+      {
+        id: "s4-m1",
+        sender: "user",
+        time: "16:02",
+        text: "Build me a moderate-risk 5-year portfolio with some dividends.",
+      },
+      {
+        id: "s4-m2",
+        sender: "assistant",
+        time: "16:03",
+        text: "Here is a balanced mix for growth, income, and lower drawdowns.",
+      },
+      {
+        id: "s4-m3",
+        sender: "assistant",
+        time: "16:03",
+        meta: "Portfolio recommendation",
+        proposal: {
+          stockName: "Balanced Growth Income",
+          symbol: "Moderate Risk",
+          side: "portfolio",
+          summary: "Diversified for steady upside, income, and defense.",
+          stats: [
+            { label: "Goal", value: "Growth + income" },
+            { label: "Horizon", value: "5 years" },
+            { label: "Risk", value: "Moderate" },
+            { label: "Rebalance", value: "Quarterly" },
+          ],
+          allocations: [
+            {
+              asset: "VOO",
+              weight: "35%",
+              reason: "US large-cap core.",
+            },
+            {
+              asset: "QQQ",
+              weight: "20%",
+              reason: "Higher-growth tech tilt.",
+            },
+            {
+              asset: "SCHD",
+              weight: "20%",
+              reason: "Dividend quality anchor.",
+            },
+            {
+              asset: "IEF",
+              weight: "15%",
+              reason: "Stability in risk-off moves.",
+            },
+            {
+              asset: "GLD",
+              weight: "10%",
+              reason: "Inflation and stress hedge.",
+            },
+          ],
+          primaryAction: "Use this portfolio",
+          secondaryAction: "Adjust risk mix",
+        },
+      },
+    ],
+    composerPlaceholder: "Adjust this portfolio...",
+  },
 ];
+
+function getAllocationPercent(weight: string) {
+  const percent = Number.parseFloat(weight);
+  if (Number.isNaN(percent)) return 0;
+  return Math.min(Math.max(percent, 0), 100);
+}
+
+function getAllocationRingSegments(allocations: NonNullable<ChatMessage["proposal"]>["allocations"]) {
+  const safeAllocations = allocations ?? [];
+  const total = safeAllocations.reduce((sum, allocation) => sum + getAllocationPercent(allocation.weight), 0);
+  const radius = 52;
+  const circumference = 2 * Math.PI * radius;
+  let offset = 0;
+
+  return safeAllocations.map((allocation, index) => {
+    const value = getAllocationPercent(allocation.weight);
+    const length = total > 0 ? (value / total) * circumference : 0;
+    const segment = {
+      ...allocation,
+      color: RING_COLORS[index % RING_COLORS.length],
+      length,
+      offset,
+    };
+    offset += length;
+    return segment;
+  });
+}
 
 function getNextSituation(current: SituationId): SituationId {
   if (current === 1) return 2;
   if (current === 2) return 3;
+  if (current === 3) return 4;
   return 1;
 }
 
@@ -216,6 +317,7 @@ export default function InexPage() {
   const active = situationOptions.find((option) => option.id === activeSituation) ?? situationOptions[0];
   const activeTheme = themeStyles[active.theme];
   const hasProposal = active.messages.some((message) => message.proposal);
+  const isPortfolioShowcase = activeSituation === 4;
   const cycleSituation = () => {
     setActiveSituation((current) => getNextSituation(current));
   };
@@ -226,72 +328,300 @@ export default function InexPage() {
         <header className="flex items-center justify-between">
           <Link
             href="/"
-            className="tap focus-accent inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.04] text-white/80"
+            className={`tap focus-accent inline-flex items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.04] text-white/80 ${
+              isPortfolioShowcase ? "h-8 w-8" : "h-9 w-9"
+            }`}
             aria-label="Back to home"
           >
-            <ArrowLeft className="h-5 w-5" />
+            <ArrowLeft className={isPortfolioShowcase ? "h-4.5 w-4.5" : "h-5 w-5"} />
           </Link>
         </header>
 
-        <section className={`mt-4 rounded-2xl border p-3.5 ${activeTheme.panel}`}>
-          <div className={`mt-3 space-y-2.5 rounded-2xl border p-2.5 ${activeTheme.thread}`}>
+        <section
+          className={`rounded-2xl border ${activeTheme.panel} ${
+            isPortfolioShowcase ? "mt-3 p-2.5" : "mt-4 p-3.5"
+          }`}
+        >
+          <div
+            className={`rounded-2xl border ${activeTheme.thread} ${
+              isPortfolioShowcase ? "mt-2 space-y-1.5 p-2" : "mt-3 space-y-2.5 p-2.5"
+            }`}
+          >
             {active.messages.map((message) => {
               const isUser = message.sender === "user";
               const speaker = isUser ? "You" : "INEX";
+              const isPortfolioProposal = message.proposal?.side === "portfolio";
               return (
                 <div key={message.id} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
-                  <div className={`flex max-w-[86%] flex-col ${isUser ? "items-end" : "items-start"}`}>
+                  <div
+                    className={`flex flex-col ${isUser ? "items-end" : "items-start"} ${
+                      isPortfolioShowcase ? "max-w-[92%]" : "max-w-[80%]"
+                    }`}
+                  >
                     {message.proposal ? (
-                      <div className="w-full overflow-hidden rounded-[22px] border border-white/[0.06] bg-[#171B27] shadow-[0_10px_30px_rgba(0,0,0,0.32)]">
+                      <div className="w-full overflow-hidden rounded-[20px] border border-white/[0.06] bg-[#171B27] shadow-[0_10px_30px_rgba(0,0,0,0.32)]">
                         <div
-                          className={`border-b border-white/[0.06] px-4 py-4 ${
-                            message.proposal.side === "buy" ? "bg-[#1c2240]" : "bg-[#261922]"
+                          className={`border-b border-white/[0.06] ${
+                            isPortfolioShowcase && isPortfolioProposal
+                              ? "px-2.5 py-2.5"
+                              : "px-3.5 py-3.5"
+                          } ${
+                            message.proposal.side === "buy"
+                              ? "bg-[#1c2240]"
+                              : message.proposal.side === "sell"
+                                ? "bg-[#261922]"
+                                : "bg-[#1A2233]"
                           }`}
                         >
-                          <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.18em]">
+                          <div
+                            className={`flex items-center gap-2 uppercase tracking-[0.18em] ${
+                              isPortfolioProposal ? (isPortfolioShowcase ? "text-[8px]" : "text-[9px]") : "text-[10px]"
+                            }`}
+                          >
                             {message.proposal.side === "buy" ? (
                               <TrendingUp className="h-3.5 w-3.5 text-[#39C38A]" />
-                            ) : (
+                            ) : message.proposal.side === "sell" ? (
                               <TrendingDown className="h-3.5 w-3.5 text-[#FF5D72]" />
+                            ) : (
+                              <ChartLine className="h-3.5 w-3.5 text-[#6DD3FF]" />
                             )}
-                            <span className={message.proposal.side === "buy" ? "text-[#A2A7FF]" : "text-[#FFB3BD]"}>
-                              {message.proposal.side === "buy" ? "Buy Proposal" : "Sell Proposal"}
+                            <span
+                              className={
+                                message.proposal.side === "buy"
+                                  ? "text-[#A2A7FF]"
+                                  : message.proposal.side === "sell"
+                                    ? "text-[#FFB3BD]"
+                                    : "text-[#9FDCFF]"
+                              }
+                            >
+                              {message.proposal.side === "buy"
+                                ? "Buy Proposal"
+                                : message.proposal.side === "sell"
+                                  ? "Sell Proposal"
+                                  : "Portfolio Match"}
                             </span>
                           </div>
-                          <p className="mt-3 text-[26px] font-semibold leading-none text-white">{message.proposal.stockName}</p>
-                          <p className="mt-1 text-[12px] text-[rgba(255,255,255,0.68)]">{message.proposal.symbol}</p>
-                          <p className="mt-3 text-[12.5px] leading-relaxed text-[rgba(255,255,255,0.78)]">{message.proposal.summary}</p>
-                          <div className="mt-4 grid grid-cols-2 gap-2">
+                          <p
+                            className={`mt-2.5 font-semibold leading-none text-white ${
+                              isPortfolioProposal ? (isPortfolioShowcase ? "text-[16px]" : "text-[18px]") : "text-[22px]"
+                            }`}
+                          >
+                            {message.proposal.stockName}
+                          </p>
+                          <p
+                            className={`mt-1 text-[rgba(255,255,255,0.68)] ${
+                              isPortfolioProposal ? (isPortfolioShowcase ? "text-[9px]" : "text-[10px]") : "text-[11px]"
+                            }`}
+                          >
+                            {message.proposal.symbol}
+                          </p>
+                          <p
+                            className={`leading-relaxed text-[rgba(255,255,255,0.78)] ${
+                              isPortfolioProposal
+                                ? isPortfolioShowcase
+                                  ? "mt-2 text-[9.5px]"
+                                  : "mt-2.5 text-[10.5px]"
+                                : "mt-2.5 text-[11.5px]"
+                            }`}
+                          >
+                            {message.proposal.summary}
+                          </p>
+                          <div
+                            className={`grid grid-cols-2 ${
+                              isPortfolioProposal
+                                ? isPortfolioShowcase
+                                  ? "mt-2 gap-1"
+                                  : "mt-3 gap-1.5"
+                                : "mt-3 gap-2"
+                            }`}
+                          >
                             {message.proposal.stats.map((stat) => (
-                              <div key={stat.label} className="rounded-xl border border-white/[0.06] bg-[#131722] px-3 py-2">
-                                <p className="text-[10px] uppercase tracking-[0.14em] text-[rgba(255,255,255,0.46)]">{stat.label}</p>
-                                <p className="mt-1 text-[15px] font-medium text-white">{stat.value}</p>
+                              <div
+                                key={stat.label}
+                                className={`rounded-xl border border-white/[0.06] bg-[#131722] ${
+                                  isPortfolioProposal
+                                    ? isPortfolioShowcase
+                                      ? "px-1.5 py-1"
+                                      : "px-2 py-1.5"
+                                    : "px-2.5 py-2"
+                                }`}
+                              >
+                                <p
+                                  className={`uppercase tracking-[0.14em] text-[rgba(255,255,255,0.46)] ${
+                                    isPortfolioProposal ? (isPortfolioShowcase ? "text-[8px]" : "text-[9px]") : "text-[10px]"
+                                  }`}
+                                >
+                                  {stat.label}
+                                </p>
+                                <p
+                                  className={`mt-1 font-medium text-white ${
+                                    isPortfolioProposal ? (isPortfolioShowcase ? "text-[11px]" : "text-[12px]") : "text-[14px]"
+                                  }`}
+                                >
+                                  {stat.value}
+                                </p>
                               </div>
                             ))}
                           </div>
+                          {message.proposal.allocations ? (
+                            <div className={isPortfolioShowcase ? "mt-2 space-y-1.5" : "mt-3 space-y-2"}>
+                              <div
+                                className={`flex flex-col items-center rounded-[18px] border border-white/[0.06] bg-[#131722] ${
+                                  isPortfolioProposal
+                                    ? isPortfolioShowcase
+                                      ? "px-2 py-1.5"
+                                      : "px-2.5 py-2.5"
+                                    : "px-3 py-3"
+                                }`}
+                              >
+                                <div
+                                  className={`relative ${
+                                    isPortfolioProposal
+                                      ? isPortfolioShowcase
+                                        ? "h-[104px] w-[104px]"
+                                        : "h-[128px] w-[128px]"
+                                      : "h-[146px] w-[146px]"
+                                  }`}
+                                >
+                                  <svg viewBox="0 0 140 140" className="h-full w-full -rotate-90" aria-hidden="true">
+                                    <circle cx="70" cy="70" r="52" fill="none" stroke="#202637" strokeWidth="12" />
+                                    {getAllocationRingSegments(message.proposal.allocations).map((segment) => (
+                                      <circle
+                                        key={segment.asset}
+                                        cx="70"
+                                        cy="70"
+                                        r="52"
+                                        fill="none"
+                                        stroke={segment.color}
+                                        strokeWidth="12"
+                                        strokeLinecap="butt"
+                                        strokeDasharray={`${segment.length} ${2 * Math.PI * 52 - segment.length}`}
+                                        strokeDashoffset={-segment.offset}
+                                      />
+                                    ))}
+                                    <circle cx="70" cy="70" r="40" fill="#0D1321" stroke="#2A3348" strokeWidth="2" />
+                                  </svg>
+                                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                                    <p
+                                      className={`uppercase tracking-[0.14em] text-[rgba(255,255,255,0.42)] ${
+                                        isPortfolioProposal ? (isPortfolioShowcase ? "text-[5px]" : "text-[6px]") : "text-[7px]"
+                                      }`}
+                                    >
+                                      Mix
+                                    </p>
+                                    <p className={`mt-0.5 font-semibold leading-none text-white ${isPortfolioShowcase ? "text-[18px]" : "text-[24px]"}`}>
+                                      100%
+                                    </p>
+                                    <p className={`mt-0.5 text-[#9FDCFF] ${isPortfolioShowcase ? "text-[8px]" : "text-[11px]"}`}>
+                                      {message.proposal.allocations.length} assets
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                              {getAllocationRingSegments(message.proposal.allocations).map((allocation) => (
+                                <div
+                                  key={allocation.asset}
+                                  className={`rounded-xl border border-white/[0.06] bg-[#131722] ${
+                                    isPortfolioProposal
+                                      ? isPortfolioShowcase
+                                        ? "px-1.5 py-1.5"
+                                        : "px-2 py-2"
+                                      : "px-2.5 py-2.5"
+                                  }`}
+                                >
+                                  <div className={isPortfolioShowcase ? "flex items-start gap-2" : "flex items-start gap-2.5"}>
+                                    <span
+                                      className={`mt-1 shrink-0 rounded-full ${
+                                        isPortfolioProposal
+                                          ? isPortfolioShowcase
+                                            ? "h-1.5 w-1.5"
+                                            : "h-2 w-2"
+                                          : "h-2.5 w-2.5"
+                                      }`}
+                                      style={{ backgroundColor: allocation.color }}
+                                      aria-hidden="true"
+                                    />
+                                    <div className="min-w-0 flex-1">
+                                      <div className="flex items-center justify-between gap-3">
+                                        <p
+                                          className={`font-medium text-white ${
+                                            isPortfolioProposal
+                                              ? isPortfolioShowcase
+                                                ? "text-[10.5px]"
+                                                : "text-[12px]"
+                                              : "text-[13px]"
+                                          }`}
+                                        >
+                                          {allocation.asset}
+                                        </p>
+                                        <p
+                                          className={`font-medium text-[#9FDCFF] ${
+                                            isPortfolioProposal
+                                              ? isPortfolioShowcase
+                                                ? "text-[9.5px]"
+                                                : "text-[11px]"
+                                              : "text-[12px]"
+                                          }`}
+                                        >
+                                          {allocation.weight}
+                                        </p>
+                                      </div>
+                                      <p
+                                        className={`mt-1 leading-relaxed text-[rgba(255,255,255,0.68)] ${
+                                          isPortfolioProposal
+                                            ? isPortfolioShowcase
+                                              ? "text-[8.5px]"
+                                              : "text-[10px]"
+                                            : "text-[11px]"
+                                        }`}
+                                      >
+                                        {allocation.reason}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : null}
                         </div>
                         <div className="bg-[#171B27]">
                           <button
                             type="button"
-                            className={`tap flex w-full items-center justify-center px-4 py-3 text-[15px] font-medium ${
-                              message.proposal.side === "buy" ? "text-[#39C38A]" : "text-[#FF5D72]"
+                            className={`tap flex w-full items-center justify-center px-4 font-medium ${
+                              isPortfolioShowcase && isPortfolioProposal ? "py-2 text-[12px]" : "py-2.5 text-[14px]"
+                            } ${
+                              message.proposal.side === "buy"
+                                ? "text-[#39C38A]"
+                                : message.proposal.side === "sell"
+                                  ? "text-[#FF5D72]"
+                                  : "text-[#6DD3FF]"
                             }`}
                           >
                             {message.proposal.primaryAction}
                           </button>
                           <button
                             type="button"
-                            className="tap flex w-full items-center justify-center border-t border-white/[0.06] px-4 py-3 text-[15px] font-medium text-[#A2A7FF]"
+                            className={`tap flex w-full items-center justify-center border-t border-white/[0.06] px-4 font-medium text-[#A2A7FF] ${
+                              isPortfolioShowcase && isPortfolioProposal ? "py-2 text-[12px]" : "py-2.5 text-[14px]"
+                            }`}
                           >
                             {message.proposal.secondaryAction}
                           </button>
                         </div>
                       </div>
                     ) : (
-                      <div className={`rounded-2xl border px-3 py-2 ${isUser ? activeTheme.userBubble : activeTheme.assistantBubble}`}>
-                        {message.text ? <p className="text-[12.5px] leading-relaxed min-[360px]:text-[13px]">{message.text}</p> : null}
+                      <div
+                        className={`rounded-[18px] border ${
+                          isPortfolioShowcase ? "px-2 py-1.5" : "px-2.5 py-2"
+                        } ${isUser ? activeTheme.userBubble : activeTheme.assistantBubble}`}
+                      >
+                        {message.text ? (
+                          <p className={isPortfolioShowcase ? "text-[10.5px] leading-relaxed" : "text-[12px] leading-relaxed min-[360px]:text-[12.5px]"}>
+                            {message.text}
+                          </p>
+                        ) : null}
                         {message.lines ? (
-                          <div className="mt-2 grid gap-1.5">
+                          <div className="mt-1.5 grid gap-1.5">
                             {message.lines.map((line) => (
                               <div key={line} className={`rounded-md border px-2 py-1 text-[11px] ${activeTheme.detailRow}`}>
                                 {line}
@@ -301,7 +631,11 @@ export default function InexPage() {
                         ) : null}
                       </div>
                     )}
-                    <p className={`mt-1 px-1 text-[10px] ${isUser ? activeTheme.userMeta : activeTheme.assistantMeta}`}>
+                    <p
+                      className={`px-1 ${isUser ? activeTheme.userMeta : activeTheme.assistantMeta} ${
+                        isPortfolioShowcase ? "mt-0.5 text-[8px]" : "mt-1 text-[10px]"
+                      }`}
+                    >
                       {speaker}
                       {message.meta ? ` | ${message.meta}` : ""}
                       {` | ${message.time}`}
@@ -320,7 +654,11 @@ export default function InexPage() {
           ) : null}
         </section>
 
-        <section className="mt-4 rounded-[22px] border border-white/[0.06] bg-[#131722] p-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
+        <section
+          className={`rounded-[22px] border border-white/[0.06] bg-[#131722] shadow-[0_10px_30px_rgba(0,0,0,0.45)] ${
+            isPortfolioShowcase ? "mt-4 p-2.5" : "mt-4 p-2.5"
+          }`}
+        >
           <div className="flex items-end gap-2">
             <button
               type="button"

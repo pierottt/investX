@@ -7,9 +7,9 @@ export interface CopyTradeAvatarProps {
 }
 
 const sizeClasses = {
-  sm: "h-10 w-10 text-sm",
-  md: "h-12 w-12 text-base",
-  lg: "h-16 w-16 text-lg",
+  sm: "h-9 w-9 text-[13px]",
+  md: "h-11 w-11 text-[15px]",
+  lg: "h-14 w-14 text-[17px]",
 };
 
 export default function CopyTradeAvatar({ avatar, size = "md", className = "" }: CopyTradeAvatarProps) {
