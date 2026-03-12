@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ChartLine, CircleDollarSign, Mic, Plus, SendHorizontal, TrendingDown, TrendingUp, X } from "lucide-react";
 
@@ -348,7 +348,6 @@ export default function InexPage() {
   const [hasStartedTyping, setHasStartedTyping] = useState(false);
   const [openSources, setOpenSources] = useState<Record<string, boolean>>({});
   const [isSuggestionSheetDismissed, setIsSuggestionSheetDismissed] = useState(false);
-  const [keyboardOffset, setKeyboardOffset] = useState(0);
   const composerInputRef = useRef<HTMLInputElement>(null);
 
   const active = situationOptions.find((option) => option.id === activeSituation) ?? situationOptions[0];
@@ -370,28 +369,6 @@ export default function InexPage() {
     ? "flex items-start gap-2 rounded-xl border border-white/[0.04] bg-white/[0.03] px-2 py-1.5 text-[8px] text-[rgba(255,255,255,0.72)]"
     : "flex items-start gap-2 rounded-xl border border-white/[0.04] bg-white/[0.03] px-2.5 py-2 text-[10px] text-[rgba(255,255,255,0.72)]";
 
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.visualViewport) return;
-
-    const viewport = window.visualViewport;
-    const syncKeyboardOffset = () => {
-      const rawInset = Math.max(0, Math.round(window.innerHeight - viewport.height - viewport.offsetTop));
-      const nextOffset = rawInset > 70 ? rawInset : 0;
-      setKeyboardOffset((currentOffset) => (currentOffset === nextOffset ? currentOffset : nextOffset));
-    };
-
-    syncKeyboardOffset();
-    viewport.addEventListener("resize", syncKeyboardOffset);
-    viewport.addEventListener("scroll", syncKeyboardOffset);
-    window.addEventListener("orientationchange", syncKeyboardOffset);
-
-    return () => {
-      viewport.removeEventListener("resize", syncKeyboardOffset);
-      viewport.removeEventListener("scroll", syncKeyboardOffset);
-      window.removeEventListener("orientationchange", syncKeyboardOffset);
-    };
-  }, []);
-
   const cycleSituation = () => {
     setActiveSituation((current) => getNextSituation(current));
     setIsSuggestionSheetDismissed(false);
@@ -408,12 +385,10 @@ export default function InexPage() {
     setIsSuggestionSheetDismissed(true);
   };
   const hasDraft = Boolean(draft.trim());
-  const chatBottomPadding = `calc(env(safe-area-inset-bottom) + 6.5rem + ${keyboardOffset}px)`;
-  const composerBottom = `calc(env(safe-area-inset-bottom) + 0.25rem + ${keyboardOffset}px)`;
 
   return (
     <div className="page-scroll no-scrollbar bg-[radial-gradient(circle_at_50%_-18%,rgba(84,90,210,0.26)_0%,rgba(8,10,16,0.92)_36%,#05070D_100%)]">
-      <div className="page-x flex min-h-full flex-col pt-safe-top" style={{ paddingBottom: chatBottomPadding }}>
+      <div className="page-x flex min-h-full flex-col pt-safe-top">
         <header className="flex items-center justify-between">
           <Link
             href="/"
@@ -847,50 +822,50 @@ export default function InexPage() {
           <CircleDollarSign className="h-3.5 w-3.5" />
           Switch situation
         </button>
-      </div>
-      <div className="pointer-events-none fixed inset-x-0 z-30 flex justify-center" style={{ bottom: composerBottom }}>
-        <section className="pointer-events-auto w-full max-w-[420px] px-3 min-[360px]:px-4 min-[390px]:px-5">
-          <div className="rounded-[22px] border border-white/[0.06] bg-[#131722] p-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
-            <div className="flex items-end gap-2">
-              <button
-                type="button"
-                className="tap flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/[0.06] bg-[#171B27] text-[rgba(255,255,255,0.56)]"
-                aria-label="More chat actions"
-              >
-                <Plus className="h-4.5 w-4.5" />
-              </button>
-              <div className="flex min-h-10 flex-1 items-center rounded-[18px] border border-white/[0.06] bg-[#0C111D] px-3">
-                <input
-                  ref={composerInputRef}
-                  value={draft}
-                  onFocus={() => {
-                    requestAnimationFrame(() => {
-                      composerInputRef.current?.scrollIntoView({ block: "nearest" });
-                    });
-                  }}
-                  onChange={(event) => {
-                    const nextDraft = event.target.value;
-                    setDraft(nextDraft);
-                    if (!hasStartedTyping && nextDraft.length > 0) {
-                      setHasStartedTyping(true);
-                    }
-                  }}
-                  placeholder={active.composerPlaceholder}
-                  className="w-full bg-transparent text-[13px] text-[rgba(255,255,255,0.9)] outline-none placeholder:text-[rgba(255,255,255,0.5)]"
-                  aria-label="Message INEX"
-                />
+        <div className="sticky bottom-0 z-30 mt-3 pb-[calc(env(safe-area-inset-bottom)+0.25rem)]">
+          <section className="mx-auto w-full max-w-[420px]">
+            <div className="rounded-[22px] border border-white/[0.06] bg-[#131722] p-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
+              <div className="flex items-end gap-2">
+                <button
+                  type="button"
+                  className="tap flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/[0.06] bg-[#171B27] text-[rgba(255,255,255,0.56)]"
+                  aria-label="More chat actions"
+                >
+                  <Plus className="h-4.5 w-4.5" />
+                </button>
+                <div className="flex min-h-10 flex-1 items-center rounded-[18px] border border-white/[0.06] bg-[#0C111D] px-3">
+                  <input
+                    ref={composerInputRef}
+                    value={draft}
+                    onFocus={() => {
+                      requestAnimationFrame(() => {
+                        composerInputRef.current?.scrollIntoView({ block: "nearest" });
+                      });
+                    }}
+                    onChange={(event) => {
+                      const nextDraft = event.target.value;
+                      setDraft(nextDraft);
+                      if (!hasStartedTyping && nextDraft.length > 0) {
+                        setHasStartedTyping(true);
+                      }
+                    }}
+                    placeholder={active.composerPlaceholder}
+                    className="w-full bg-transparent text-[13px] text-[rgba(255,255,255,0.9)] outline-none placeholder:text-[rgba(255,255,255,0.5)]"
+                    aria-label="Message INEX"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={!hasDraft ? cycleSituation : undefined}
+                  className="tap flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#5F63B6] bg-[#2F286A] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)]"
+                  aria-label={hasDraft ? "Send message" : "Switch INEX demo situation"}
+                >
+                  {hasDraft ? <SendHorizontal className="h-4.5 w-4.5" /> : <Mic className="h-4.5 w-4.5" />}
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={!hasDraft ? cycleSituation : undefined}
-                className="tap flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#5F63B6] bg-[#2F286A] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)]"
-                aria-label={hasDraft ? "Send message" : "Switch INEX demo situation"}
-              >
-                {hasDraft ? <SendHorizontal className="h-4.5 w-4.5" /> : <Mic className="h-4.5 w-4.5" />}
-              </button>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </div>
   );
