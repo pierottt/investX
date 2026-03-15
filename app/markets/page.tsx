@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { ChevronRight, Mail, Search } from "lucide-react";
 import InexActionButton from "@/components/shell/InexActionButton";
@@ -14,10 +15,12 @@ import {
   marketBreadth,
   heatmap,
   upcomingEarnings,
+  personalizedAssetPicks,
   tradeRegions,
   thaiIndicesMock,
   worldIndicesMock,
 } from "@/lib/data/mock";
+import type { PersonalizedAssetPick } from "@/lib/data/mock";
 
 export default function MarketsPage() {
   const [tab, setTab] = useState("Overview");
@@ -108,6 +111,33 @@ export default function MarketsPage() {
             </div>
 
             <p className="mt-2 px-0.5 text-[11.5px] text-white/55">Current mock data is displayed for US market examples.</p>
+
+            <section className="mt-7">
+              <div className="px-0.5">
+                <div className="flex items-center gap-2">
+                  <span className="h-px w-8 bg-[linear-gradient(90deg,rgba(229,184,66,0.95)_0%,rgba(229,184,66,0)_100%)]" />
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#E5B842]">Personalized radar</p>
+                </div>
+                <div className="mt-2">
+                  <div>
+                    <h2 className="text-[19px] font-semibold leading-[1.02] tracking-[-0.04em] text-white">
+                      Top 3 picks for you <span className="text-[#F4D371]">today</span>
+                    </h2>
+                    <p className="mt-1 text-[12px] text-white/50">For your growth profile.</p>
+                  </div>
+                </div>
+              </div>
+              <p className="mt-3 mb-2 px-0.5 text-[11px] uppercase tracking-[0.16em] text-white/32">
+                Shortlist
+              </p>
+              <CardGlass className="bg-[#141416]/78 border border-white/[0.035] p-2.5">
+                <div className="flex flex-col gap-2.5">
+                  {personalizedAssetPicks.map((asset, index) => (
+                    <PersonalizedAssetRow key={asset.symbol} asset={asset} rank={index + 1} />
+                  ))}
+                </div>
+              </CardGlass>
+            </section>
 
             {/* Market Breadth */}
             <section className="mt-6">
@@ -255,5 +285,55 @@ function IndexCard({ data }: { data: IndexCardData }) {
         </div>
       </div>
     </CardGlass>
+  );
+}
+
+function PersonalizedAssetRow({ asset, rank }: { asset: PersonalizedAssetPick; rank: number }) {
+  const isPositive = asset.changePct > 0;
+  const isZero = asset.changePct === 0;
+  const accentClass = isPositive ? "text-[#00C076]" : isZero ? "text-white/45" : "text-[#FF4D4F]";
+  const badgeClass = isPositive
+    ? "bg-[#00C076]/14 text-[#6EE7B7] border-[#00C076]/20"
+    : isZero
+      ? "bg-white/8 text-white/65 border-white/10"
+      : "bg-[#FF4D4F]/14 text-[#FF9A9B] border-[#FF4D4F]/20";
+  const trend = isPositive ? "up" : isZero ? "neutral" : "down";
+
+  return (
+    <Link
+      href={`/stocks/${asset.symbol}`}
+      className="flex items-center gap-2.5 rounded-[16px] border border-white/[0.045] bg-white/[0.02] px-2.5 py-2.5 transition-colors hover:bg-white/[0.04]"
+    >
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#E5B842]/14 text-[12px] font-bold text-[#F4D371]">
+        {rank}
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <span className="text-[13px] font-semibold text-white">{asset.symbol}</span>
+          <span className="rounded-full border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-[10px] font-medium text-white/58">
+            {asset.assetLabel}
+          </span>
+        </div>
+        <p className="truncate text-[12px] text-white/65">{asset.name}</p>
+        <p className="mt-0.5 text-[10.5px] leading-relaxed text-white/48">{asset.reason}</p>
+      </div>
+
+      <div className="flex shrink-0 items-center gap-2.5">
+        <div className="hidden min-[390px]:block">
+          <SparklineMini points={asset.sparkline} trend={trend} className="h-7 w-[60px]" />
+        </div>
+        <div className="text-right">
+          <div className={`text-[12px] font-semibold ${accentClass}`}>
+            {isPositive ? "+" : ""}
+            {asset.changePct.toFixed(2)}%
+          </div>
+          <div className="mt-0.5 text-[10.5px] font-medium text-white/68">${asset.price.toFixed(2)}</div>
+          <div className={`mt-1 rounded-full border px-1.5 py-0.5 text-[9.5px] font-medium ${badgeClass}`}>
+            {asset.confidence}
+          </div>
+        </div>
+      </div>
+    </Link>
   );
 }

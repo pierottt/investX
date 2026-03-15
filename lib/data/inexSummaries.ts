@@ -9,6 +9,11 @@ export interface InexSummary {
   id: string;
   asset: string;
   brief: string;
+  forecast: {
+    price: string;
+    changePct: string;
+    tone: "up" | "down";
+  };
   sources: InexSource[];
 }
 
@@ -17,6 +22,11 @@ export const inexSummaries: InexSummary[] = [
     id: "googl-ad-tone",
     asset: "GOOGL",
     brief: "Ad pricing soft; premarket pressure builds.",
+    forecast: {
+      price: "171.20",
+      changePct: "-1.8%",
+      tone: "down",
+    },
     sources: [
       {
         id: "reuters",
@@ -36,6 +46,11 @@ export const inexSummaries: InexSummary[] = [
     id: "nvda-ai-demand",
     asset: "NVDA",
     brief: "AI server demand stays firm.",
+    forecast: {
+      price: "192.50",
+      changePct: "+5.4%",
+      tone: "up",
+    },
     sources: [
       {
         id: "bloomberg",
@@ -49,6 +64,11 @@ export const inexSummaries: InexSummary[] = [
     id: "gold-yields",
     asset: "Gold",
     brief: "Yields cool; defensive bid improves.",
+    forecast: {
+      price: "2,198",
+      changePct: "+1.2%",
+      tone: "up",
+    },
     sources: [
       {
         id: "bloomberg",
@@ -62,6 +82,11 @@ export const inexSummaries: InexSummary[] = [
     id: "usdthb-range",
     asset: "USD/THB",
     brief: "Range remains tight today.",
+    forecast: {
+      price: "35.40",
+      changePct: "-0.6%",
+      tone: "down",
+    },
     sources: [
       {
         id: "reuters",
@@ -75,6 +100,11 @@ export const inexSummaries: InexSummary[] = [
     id: "set-energy",
     asset: "SET Energy",
     brief: "Crude stabilizes; rotation resumes.",
+    forecast: {
+      price: "1,118",
+      changePct: "+2.1%",
+      tone: "up",
+    },
     sources: [
       {
         id: "bangkok-post",
@@ -88,6 +118,11 @@ export const inexSummaries: InexSummary[] = [
     id: "set-banks",
     asset: "SET Banks",
     brief: "Stable NIM keeps bids selective.",
+    forecast: {
+      price: "428",
+      changePct: "+0.9%",
+      tone: "up",
+    },
     sources: [
       {
         id: "bangkok-post",
@@ -101,6 +136,11 @@ export const inexSummaries: InexSummary[] = [
     id: "us-bonds",
     asset: "US Bonds",
     brief: "Rate-cut bets lift duration.",
+    forecast: {
+      price: "108.30",
+      changePct: "+1.1%",
+      tone: "up",
+    },
     sources: [
       {
         id: "reuters",
@@ -114,6 +154,11 @@ export const inexSummaries: InexSummary[] = [
     id: "oil-vol",
     asset: "Brent Oil",
     brief: "Inventory noise keeps swings elevated.",
+    forecast: {
+      price: "79.40",
+      changePct: "-1.7%",
+      tone: "down",
+    },
     sources: [
       {
         id: "bloomberg",
@@ -127,6 +172,11 @@ export const inexSummaries: InexSummary[] = [
     id: "dividend-defensive",
     asset: "Dividend Stocks",
     brief: "Defensive inflows pick up.",
+    forecast: {
+      price: "104.80",
+      changePct: "+0.8%",
+      tone: "up",
+    },
     sources: [
       {
         id: "reuters",
@@ -140,6 +190,11 @@ export const inexSummaries: InexSummary[] = [
     id: "china-metals",
     asset: "Metals",
     brief: "China demand hopes support Asia.",
+    forecast: {
+      price: "92.10",
+      changePct: "+1.5%",
+      tone: "up",
+    },
     sources: [
       {
         id: "bloomberg",
@@ -153,6 +208,11 @@ export const inexSummaries: InexSummary[] = [
     id: "global-risk",
     asset: "Global Equities",
     brief: "Tone stays neutral-defensive.",
+    forecast: {
+      price: "5,180",
+      changePct: "-0.4%",
+      tone: "down",
+    },
     sources: [
       {
         id: "reuters",

@@ -30,26 +30,46 @@ export default function InexBriefFeedPage() {
         </section>
 
         <section className="mt-3.5 rounded-[22px] border border-[#6f75dc]/58 bg-[#151a26]/84 p-3.5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02),0_24px_42px_rgba(0,0,0,0.4)] min-[360px]:p-4">
-          <div className="space-y-3">
-            {inexSummaries.map((summary) => (
-              <p key={summary.id} className="text-[13px] leading-snug text-white/88 min-[360px]:text-[14px]">
-                <span className="font-medium text-white/95">{summary.asset}:</span> <span>{summary.brief} </span>
-                <span className="inline-flex flex-wrap items-center gap-1 align-middle">
-                  {summary.sources.map((source) => (
-                    <a
-                      key={`${summary.id}-${source.id}`}
-                      href={source.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="tap inline-flex align-middle"
-                      aria-label={`Open ${source.name} source`}
-                    >
-                      <InexSourcePill source={source} className="border-white/[0.12] bg-[#171d2c]/95 px-1.5 py-0.5" />
-                    </a>
-                  ))}
-                </span>
-              </p>
-            ))}
+          <div className="space-y-0">
+            {inexSummaries.map((summary) => {
+              const isPositive = summary.forecast.tone === "up";
+              const forecastAccent = isPositive ? "var(--gain)" : "var(--loss)";
+
+              return (
+                <div key={summary.id} className="border-b border-white/[0.06] py-2.5 last:border-b-0 last:pb-0 first:pt-0">
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="min-w-0 flex-1 text-[13px] leading-snug text-white/88 min-[360px]:text-[14px]">
+                      <span className="font-medium text-white/95">{summary.asset}:</span> <span>{summary.brief}</span>
+                    </p>
+                    <div className="mt-0.5 shrink-0 text-right">
+                      <p className="text-[8px] font-medium uppercase tracking-[0.16em] text-white/32">Forecast</p>
+                      <div className="mt-1 flex items-baseline justify-end gap-1.5">
+                        <p className="text-[11px] font-semibold leading-none tabular-nums min-[360px]:text-[12px]" style={{ color: forecastAccent }}>
+                          {summary.forecast.price}
+                        </p>
+                        <p className="text-[9.5px] font-semibold leading-none tabular-nums min-[360px]:text-[10px]" style={{ color: forecastAccent }}>
+                          {summary.forecast.changePct}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-1.5 inline-flex flex-wrap items-center gap-1 align-middle">
+                    {summary.sources.map((source) => (
+                      <a
+                        key={`${summary.id}-${source.id}`}
+                        href={source.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="tap inline-flex align-middle"
+                        aria-label={`Open ${source.name} source`}
+                      >
+                        <InexSourcePill source={source} className="border-white/[0.12] bg-[#171d2c]/95 px-1.5 py-0.5" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
       </div>

@@ -35,7 +35,7 @@ export default async function CopyTradeInvestorDetailPage({
 
         <CopyTradeProfileCard investor={investor} className="mt-3.5" />
         <CopyTradePerformanceCard investor={investor} className="mt-3.5" />
-        <CopyTradeHoldingsCard holdings={investor.holdings} className="mt-3.5" />
+        {/* <CopyTradeHoldingsCard holdings={investor.holdings} className="mt-3.5" /> */}
       </div>
 
       <CopyTradeSetupSheet investor={investor} />

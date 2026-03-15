@@ -113,12 +113,12 @@ export default function HomePage() {
             <article className="flex h-[100px] w-full items-center justify-between rounded-2xl border border-white/[0.06] bg-[#0d1220]/85 px-3.5 py-3 min-[360px]:px-4">
               <div className="min-w-0 flex items-center gap-3">
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#4f45aa]/55 bg-[#11142a]">
-                  <Image src="/inex/icon.svg" alt="INEX logo" width={32} height={32} className="h-7 w-7" />
+                  <Image src="/inex/icon.svg" alt="N'XAP logo" width={32} height={32} className="h-7 w-7" />
                 </span>
                 <div className="min-w-0">
                   <p className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#8f97c6] min-[360px]:text-[11px]">
                     <BadgeAlert className="h-3.5 w-3.5 text-[#6f73f8]" />
-                    INEX
+                    N'XAP
                   </p>
                   <h3 className="mt-1 truncate text-[20px] font-semibold leading-none tracking-tight text-white/94 min-[360px]:text-[22px]">Evening Brief</h3>
                 </div>

@@ -18,6 +18,7 @@ interface ChatMessage {
   lines?: string[];
   meta?: string;
   sources?: string[];
+  forecastPrice?: string;
   proposal?: {
     stockName: string;
     symbol: string;
@@ -103,6 +104,7 @@ const situationOptions: SituationOption[] = [
         time: "09:14",
         text: "SET closed higher with broad participation from energy and telecom. US futures are slightly positive while USD/THB is stable, so risk sentiment is neutral-to-positive.",
         sources: ["SET market summary", "S&P 500 futures", "USD/THB spot rate"],
+        forecastPrice: "SET 1,452",
       },
       {
         id: "s1-m4",
@@ -119,7 +121,7 @@ const situationOptions: SituationOption[] = [
         text: "Perfect. Keep me posted if momentum fades.",
       },
     ],
-    composerPlaceholder: "Ask INEX about today's market...",
+    composerPlaceholder: "Ask N'XAP about today's market...",
   },
   {
     id: 2,
@@ -137,6 +139,7 @@ const situationOptions: SituationOption[] = [
         time: "10:22",
         text: "Understood. Confirming your intent: BUY GOOGL with a 173.50 limit for 20 shares. Google momentum is stabilizing above intraday support, so a staged entry keeps slippage controlled and caps downside if setup fails.",
         sources: ["GOOGL intraday price action", "Support and resistance model", "Order request: 173.50 x 20"],
+        forecastPrice: "GOOGL 178.80",
       },
       {
         id: "s2-m3",
@@ -184,6 +187,7 @@ const situationOptions: SituationOption[] = [
         time: "14:08",
         text: "Got it. Confirming your intent: SELL NVDA at 182.70 for a 10-share partial close. NVDA is near resistance after an extended run, so this take-profit locks gains while keeping smaller upside exposure if momentum continues.",
         sources: ["NVDA intraday trend", "Resistance model", "Order request: 182.70 x 10"],
+        forecastPrice: "NVDA 182.70",
       },
       {
         id: "s3-m3",
@@ -455,7 +459,7 @@ export default function InexPage() {
             ) : (
               active.messages.map((message) => {
                 const isUser = message.sender === "user";
-                const speaker = isUser ? "You" : "INEX";
+                const speaker = isUser ? "You" : "N'XAP";
                 const isPortfolioProposal = message.proposal?.side === "portfolio";
                 const hasSources = !isUser && !message.proposal && Boolean(message.text && message.sources?.length);
                 const isSourcesOpen = Boolean(openSources[message.id]);
@@ -743,6 +747,16 @@ export default function InexPage() {
                               ) : null}
                             </p>
                           ) : null}
+                          {message.forecastPrice ? (
+                            <div
+                              className={`mt-2 inline-flex items-center gap-2 rounded-full border border-[#5F63B6]/45 bg-[#232A45] text-[#C8CCFF] ${
+                                isPortfolioShowcase ? "px-2 py-1 text-[8px]" : "px-2.5 py-1.5 text-[10px]"
+                              }`}
+                            >
+                              <span className="uppercase tracking-[0.16em] text-[#8F97E8]">Forecast price</span>
+                              <span className="font-semibold text-white">{message.forecastPrice}</span>
+                            </div>
+                          ) : null}
                           {message.lines ? (
                             <div className="mt-1.5 grid gap-1.5">
                               {message.lines.map((line) => (
@@ -817,7 +831,7 @@ export default function InexPage() {
           type="button"
           onClick={cycleSituation}
           className="mt-4 flex w-full items-center justify-center gap-2 text-[10px] uppercase tracking-[0.16em] text-[rgba(255,255,255,0.48)]"
-          aria-label="Switch INEX demo situation"
+          aria-label="Switch N'XAP demo situation"
         >
           <CircleDollarSign className="h-3.5 w-3.5" />
           Switch situation
@@ -851,14 +865,14 @@ export default function InexPage() {
                     }}
                     placeholder={active.composerPlaceholder}
                     className="w-full bg-transparent text-[13px] text-[rgba(255,255,255,0.9)] outline-none placeholder:text-[rgba(255,255,255,0.5)]"
-                    aria-label="Message INEX"
+                    aria-label="Message N'XAP"
                   />
                 </div>
                 <button
                   type="button"
                   onClick={!hasDraft ? cycleSituation : undefined}
                   className="tap flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#5F63B6] bg-[#2F286A] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)]"
-                  aria-label={hasDraft ? "Send message" : "Switch INEX demo situation"}
+                  aria-label={hasDraft ? "Send message" : "Switch N'XAP demo situation"}
                 >
                   {hasDraft ? <SendHorizontal className="h-4.5 w-4.5" /> : <Mic className="h-4.5 w-4.5" />}
                 </button>

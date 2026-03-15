@@ -38,6 +38,50 @@ export const upcomingEarnings = [
   }
 ];
 
+export interface PersonalizedAssetPick {
+  symbol: string;
+  name: string;
+  assetLabel: string;
+  price: number;
+  reason: string;
+  changePct: number;
+  confidence: string;
+  sparkline: number[];
+}
+
+export const personalizedAssetPicks: PersonalizedAssetPick[] = [
+  {
+    symbol: "NVDA",
+    name: "NVIDIA Corp",
+    assetLabel: "AI growth stock",
+    price: 144.82,
+    changePct: 2.84,
+    reason: "Matches your growth tilt while semiconductor momentum remains stronger today.",
+    confidence: "High fit",
+    sparkline: [38, 42, 41, 45, 49, 52, 51, 57, 60, 64, 67],
+  },
+  {
+    symbol: "SCHD",
+    name: "Schwab US Dividend Equity ETF",
+    assetLabel: "Dividend ETF",
+    price: 82.14,
+    changePct: 0.61,
+    reason: "Balances a tech-heavy watchlist with steadier income-oriented exposure.",
+    confidence: "Balanced fit",
+    sparkline: [46, 47, 46, 48, 49, 49, 50, 51, 52, 53, 54],
+  },
+  {
+    symbol: "GLD",
+    name: "SPDR Gold Shares",
+    assetLabel: "Defensive asset",
+    price: 219.36,
+    changePct: 0.34,
+    reason: "Adds a defensive hedge when macro headlines can pressure higher-beta names.",
+    confidence: "Diversifier",
+    sparkline: [29, 29, 30, 30, 31, 32, 32, 33, 33, 34, 35],
+  },
+];
+
 export const portfolio = {
   total: 59624011.2,
   gainValue: 9682.0,

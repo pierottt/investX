@@ -22,9 +22,62 @@ function buildLine(points: number[], width: number, height: number) {
 
 const chartLine = buildLine(chartPoints, 620, 210);
 
+type CautionLevel = "match" | "neutral" | "mismatch";
+
+const cautionByTicker: Record<string, CautionLevel> = {
+  AAPL: "match",
+  AMD: "neutral",
+  KO: "match",
+  NVDA: "mismatch",
+  ORCL: "match",
+  TSLA: "mismatch",
+};
+
+const cautionConfig: Record<
+  CautionLevel,
+  {
+    badge: string;
+    headline: string;
+    description: string;
+    cardClassName: string;
+    headlineClassName: string;
+    dotClassName: string;
+    toneClassName: string;
+  }
+> = {
+  match: {
+    badge: "Green",
+    headline: "Matches your risk profile",
+    description: "This stock aligns with the user risk profile and sits within a comfortable risk range.",
+    cardClassName: "border-[#3b7c67]/50 bg-[linear-gradient(135deg,rgba(17,39,31,0.98)_0%,rgba(10,24,20,0.94)_100%)]",
+    headlineClassName: "text-[#b5f1dc]",
+    dotClassName: "bg-[#5cd8b4]",
+    toneClassName: "border-[#4f927b]/60 bg-white/[0.04] text-[#8ee0c3]",
+  },
+  neutral: {
+    badge: "Yellow",
+    headline: "Neutral with your risk profile",
+    description: "This stock is in the middle. It is not a strong fit or a strong mismatch for the user profile.",
+    cardClassName: "border-[#8b6c35]/50 bg-[linear-gradient(135deg,rgba(42,33,19,0.98)_0%,rgba(27,22,15,0.94)_100%)]",
+    headlineClassName: "text-[#ffe3a0]",
+    dotClassName: "bg-[#f0c36a]",
+    toneClassName: "border-[#a78343]/60 bg-white/[0.04] text-[#f2cb76]",
+  },
+  mismatch: {
+    badge: "Red",
+    headline: "Does not match your risk profile",
+    description: "This stock carries more risk than the user profile suggests and should be reviewed with caution.",
+    cardClassName: "border-[#87434c]/50 bg-[linear-gradient(135deg,rgba(42,21,26,0.98)_0%,rgba(27,14,17,0.94)_100%)]",
+    headlineClassName: "text-[#ffb6be]",
+    dotClassName: "bg-[#eb6d77]",
+    toneClassName: "border-[#9f5861]/60 bg-white/[0.04] text-[#f19ca3]",
+  },
+};
+
 export default async function StockDetailPage({ params }: { params: Promise<{ ticker: string }> }) {
   const { ticker } = await params;
   const symbol = ticker.toUpperCase();
+  const caution = cautionConfig[cautionByTicker[symbol] ?? "neutral"];
 
   return (
     <div className="page-scroll no-scrollbar bg-[radial-gradient(circle_at_52%_-20%,rgba(88,95,212,0.17)_0%,#070a12_34%,#05070d_100%)]">
@@ -180,6 +233,22 @@ export default async function StockDetailPage({ params }: { params: Promise<{ ti
             <span className="text-center text-[#ea6a72]">40</span>
             <span className="text-right">151.01</span>
           </div>
+        </section>
+
+        <section className={`mt-5 rounded-2xl border p-3 ${caution.cardClassName}`}>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[12px] text-white/50 min-[360px]:text-[13px]">Caution Type</p>
+              <h3 className={`mt-1 text-[20px] font-semibold min-[360px]:text-[22px] ${caution.headlineClassName}`}>{caution.headline}</h3>
+            </div>
+            {/* <div
+              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[12px] font-medium min-[360px]:text-[13px] ${caution.toneClassName}`}
+            >
+              <span className={`h-2 w-2 rounded-full ${caution.dotClassName}`} />
+              {caution.badge}
+            </div> */}
+          </div>
+          <p className="mt-2 text-[12px] leading-relaxed text-white/66 min-[360px]:text-[13px]">{caution.description}</p>
         </section>
 
         <section className="mt-5 rounded-2xl border border-white/[0.07] bg-[#101522]/80 p-3">

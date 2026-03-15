@@ -12,7 +12,7 @@ export default function InexActionButton({
   className = "",
   iconClassName = "",
   imageClassName = "",
-  ariaLabel = "Open INEX assistant",
+  ariaLabel = "Open N'XAP assistant",
 }: InexActionButtonProps) {
   const resolvedIconClassName = iconClassName || imageClassName;
 
@@ -23,7 +23,7 @@ export default function InexActionButton({
       className={`tap focus-accent relative inline-flex h-9 w-9 items-center justify-center text-[#F5F7FA] transition-colors ${className}`}
     >
       <Image src="/inex/icon.svg" alt="" width={25} height={25} className={`relative h-7 w-7 ${resolvedIconClassName}`} />
-      <span className="sr-only">INEX</span>
+      <span className="sr-only">N'XAP</span>
     </Link>
   );
 }
